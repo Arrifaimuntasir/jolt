@@ -148,6 +148,20 @@
             border-color: #090D15;
         }
 
+        /* Smooth Horizontal Scroll without scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         /* Dropdown transition */
         .nav-dropdown {
             opacity: 0;
@@ -164,25 +178,25 @@
         }
     </style>
 </head>
-<body class="selection:bg-[#0078D4] selection:text-white">
+<body class="selection:bg-[#0078D4] selection:text-white antialiased overflow-x-hidden">
 
-    <!-- Main Sticky Navigation Bar (JOLT Ultra-Clean Minimalist) -->
+    <!-- Main Sticky Navigation Bar (Bolt-Style Ultra-Clean Minimalist) -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
             
             <!-- Brand Logo (Clean JOLT Electric Blue with White Lightning) -->
             <a href="/" class="flex items-center gap-2.5 group">
-                <div class="w-10 h-10 rounded-2xl bg-[#0078D4] flex items-center justify-center text-white shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform">
-                    <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#0078D4] flex items-center justify-center text-white shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                     </svg>
                 </div>
-                <span class="text-2xl font-black tracking-tight text-slate-900 flex items-center">
+                <span class="text-xl sm:text-2xl font-black tracking-tight text-slate-900 flex items-center">
                     JOLT<span class="text-[#0078D4]">.</span>
                 </span>
             </a>
 
-            <!-- Center Navigation Items with Rich Modern Dropdown -->
+            <!-- Center Navigation Items with Rich Modern Dropdown (Desktop) -->
             <nav class="hidden lg:flex items-center gap-1 xl:gap-2 text-[13px] font-bold text-slate-700">
                 
                 <!-- 1. Rich Products & Solutions Dropdown -->
@@ -215,7 +229,7 @@
                         </a>
 
                         <a href="#swap" class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition group/item">
-                            <div class="w-9 h-9 rounded-lg bg-brand-green/20 text-brand-greenDark flex items-center justify-center shrink-0 group-hover/item:bg-brand-green group-hover/item:text-brand-obsidian transition">
+                            <div class="w-9 h-9 rounded-lg bg-blue-50 text-[#0078D4] flex items-center justify-center shrink-0 group-hover/item:bg-[#0078D4] group-hover/item:text-white transition">
                                 <i data-lucide="zap" class="w-4 h-4"></i>
                             </div>
                             <div>
@@ -252,12 +266,12 @@
                 </a>
             </nav>
 
-            <!-- Actions & Utility Group -->
-            <div class="flex items-center gap-2.5 sm:gap-3">
+            <!-- Actions & Utility Group (Bolt Style: Clean Language Selector & Hamburger Only) -->
+            <div class="flex items-center gap-2 sm:gap-3">
                 
                 <!-- Modern Language Selector Dropdown -->
                 <div class="relative dropdown-parent py-2">
-                    <button class="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-slate-300 hover:border-slate-800 text-xs font-bold text-slate-700 hover:text-brand-obsidian bg-white transition shadow-sm" id="lang-dropdown-trigger">
+                    <button class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-full border border-slate-200 hover:border-slate-800 text-xs font-bold text-slate-700 hover:text-brand-obsidian bg-white transition shadow-xs" id="lang-dropdown-trigger">
                         <i data-lucide="globe" class="w-3.5 h-3.5 text-slate-500"></i>
                         <span id="current-lang-label">Kiswahili</span>
                         <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
@@ -269,96 +283,135 @@
                             <span class="flex items-center gap-2">
                                 <span>🇹🇿</span> Kiswahili
                             </span>
-                            <span class="text-brand-green font-black" id="check-sw">✓</span>
+                            <span class="text-[#0078D4] font-black" id="check-sw">✓</span>
                         </button>
                         <button onclick="setLanguage('en')" class="w-full flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 transition text-slate-800" id="opt-lang-en">
                             <span class="flex items-center gap-2">
                                 <span>🇬🇧</span> English
                             </span>
-                            <span class="text-brand-green font-black hidden" id="check-en">✓</span>
+                            <span class="text-[#0078D4] font-black hidden" id="check-en">✓</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Driver CTA Button -->
-                <a href="#dereva" class="hidden sm:inline-flex px-4 py-2.5 rounded-full border border-slate-300 text-xs font-extrabold text-brand-obsidian hover:border-brand-obsidian transition" data-i18n="nav_driver_cta">
-                    Kuwa Dereva
-                </a>
-
-                <!-- Download App Primary CTA (Opens Play Store or QR Modal on PC) -->
-                <button onclick="handleAppDownload('passenger')" class="btn-pill-green inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-black shadow-sm">
-                    <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
-                    <span data-i18n="nav_download">Google Play</span>
-                </button>
-
-                <!-- Mobile Hamburger Button -->
-                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition">
+                <!-- Mobile & Tablet Hamburger Button (Clean, Spacious) -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl text-slate-800 hover:bg-slate-100 active:scale-95 transition" aria-label="Fungua Menyu">
                     <i data-lucide="menu" id="mobile-menu-icon" class="w-6 h-6"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Sliding Drawer -->
-        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 bg-white/98 backdrop-blur-2xl px-6 py-5 space-y-4 shadow-xl">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wider" data-i18n="select_language">Chagua Lugha / Language</span>
+        <!-- Mobile Sliding Drawer (Bolt Style - Spacious, Clean & Responsive) -->
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-100 bg-white/98 backdrop-blur-2xl px-5 sm:px-6 py-6 space-y-5 shadow-2xl transition-all">
+            <!-- Mobile Language Selector -->
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wider" data-i18n="select_language">Lugha / Language</span>
                 <div class="inline-flex items-center bg-slate-100 rounded-full p-1 border border-slate-200">
-                    <button onclick="setLanguage('sw')" id="mobile-lang-sw" class="px-3 py-1 rounded-full text-xs font-black bg-brand-green text-brand-obsidian shadow-sm">
+                    <button onclick="setLanguage('sw')" id="mobile-lang-sw" class="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#0078D4] text-white shadow-xs transition">
                         Kiswahili
                     </button>
-                    <button onclick="setLanguage('en')" id="mobile-lang-en" class="px-3 py-1 rounded-full text-xs font-bold text-slate-600">
+                    <button onclick="setLanguage('en')" id="mobile-lang-en" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-600 hover:text-slate-900 transition">
                         English
                     </button>
                 </div>
             </div>
 
-            <nav class="space-y-2 text-sm font-bold text-slate-700">
-                <a href="#abiria" onclick="toggleMobileMenu()" class="block p-2 rounded-lg hover:bg-slate-50" data-i18n="menu_rider_title">App ya Abiria</a>
-                <a href="#dereva" onclick="toggleMobileMenu()" class="block p-2 rounded-lg hover:bg-slate-50" data-i18n="menu_driver_title">App ya Dereva (0% Kamisheni)</a>
-                <a href="#swap" onclick="toggleMobileMenu()" class="block p-2 rounded-lg hover:bg-slate-50" data-i18n="menu_swap_title">JOLT Swap (EV Battery)</a>
-                <a href="#vyombo" onclick="toggleMobileMenu()" class="block p-2 rounded-lg hover:bg-slate-50" data-i18n="nav_vehicles">Vyombo vya Usafiri</a>
-                <a href="#akiba" onclick="toggleMobileMenu()" class="block p-2 rounded-lg hover:bg-slate-50" data-i18n="nav_savings">Kikokotoo cha Akiba</a>
-                <a href="#faq" onclick="toggleMobileMenu()" class="block p-2 rounded-lg hover:bg-slate-50" data-i18n="nav_faq">Maswali (FAQ)</a>
+            <!-- Spacious Nav Links -->
+            <nav class="space-y-1.5 text-base font-bold text-slate-800">
+                <a href="#abiria" onclick="toggleMobileMenu()" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition">
+                    <span class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-[#0078D4] flex items-center justify-center">
+                            <i data-lucide="smartphone" class="w-4 h-4"></i>
+                        </div>
+                        <span data-i18n="menu_rider_title">App ya Abiria</span>
+                    </span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="#dereva" onclick="toggleMobileMenu()" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition">
+                    <span class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-[#0078D4] flex items-center justify-center">
+                            <i data-lucide="percent" class="w-4 h-4"></i>
+                        </div>
+                        <span data-i18n="menu_driver_title">App ya Dereva (0%)</span>
+                    </span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="#swap" onclick="toggleMobileMenu()" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition">
+                    <span class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-[#0078D4] flex items-center justify-center">
+                            <i data-lucide="zap" class="w-4 h-4"></i>
+                        </div>
+                        <span data-i18n="menu_swap_title">JOLT Swap (EV Battery)</span>
+                    </span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="#vyombo" onclick="toggleMobileMenu()" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition">
+                    <span class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
+                            <i data-lucide="bike" class="w-4 h-4"></i>
+                        </div>
+                        <span data-i18n="nav_vehicles">Vyombo vya Usafiri</span>
+                    </span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="#akiba" onclick="toggleMobileMenu()" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition">
+                    <span class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
+                            <i data-lucide="calculator" class="w-4 h-4"></i>
+                        </div>
+                        <span data-i18n="nav_savings">Kikokotoo cha Akiba</span>
+                    </span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="#habari" onclick="toggleMobileMenu()" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition">
+                    <span class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
+                            <i data-lucide="newspaper" class="w-4 h-4"></i>
+                        </div>
+                        <span data-i18n="news_heading">News and updates</span>
+                    </span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                </a>
+                <a href="#faq" onclick="toggleMobileMenu()" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition">
+                    <span class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i>
+                        </div>
+                        <span data-i18n="nav_faq">Maswali (FAQ)</span>
+                    </span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                </a>
             </nav>
-
-            <div class="pt-2 flex flex-col gap-2">
-                <a href="#pakua" class="btn-pill-green text-center py-3 rounded-full text-xs font-black" data-i18n="btn_download_rider_short">
-                    Pakua App ya Abiria
-                </a>
-                <a href="#pakua" class="btn-pill-outline text-center py-3 rounded-full text-xs font-extrabold" data-i18n="btn_download_driver_short">
-                    Pakua App ya Dereva (0%)
-                </a>
-            </div>
         </div>
     </header>
 
-    <!-- Hero Section (JOLT Clean Minimalist) -->
-    <section class="relative pt-12 pb-16 lg:pt-20 lg:pb-24 overflow-hidden bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+    <!-- Hero Section (JOLT Clean Minimalist - Mobile Responsive) -->
+    <section class="relative pt-8 sm:pt-12 lg:pt-20 pb-12 sm:pb-16 lg:pb-24 overflow-hidden bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-center">
                 
                 <!-- Left: Headline & Actions -->
-                <div class="lg:col-span-6 space-y-6">
+                <div class="lg:col-span-6 space-y-5 sm:space-y-6">
                     
-                    <!-- Main Headline (Large & Punchy) -->
-                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-slate-900 tracking-tight leading-[1.04]" id="hero-main-title">
+                    <!-- Main Headline (Large, Punchy & Fluid for Mobile) -->
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-slate-900 tracking-tight leading-[1.12] sm:leading-[1.06]" id="hero-main-title">
                         Safari za haraka na nafuu mjini.
                     </h1>
 
                     <!-- Clear, High-Value Subtitle -->
-                    <p class="text-lg sm:text-xl text-slate-600 font-normal leading-relaxed max-w-xl" data-i18n="hero_subtitle">
+                    <p class="text-sm sm:text-lg lg:text-xl text-slate-600 font-normal leading-relaxed max-w-xl" data-i18n="hero_subtitle">
                         Pata usafiri salama wa Boda, Bajaji na Magari kwa sekunde chache. <strong>0% kamisheni kwa madereva</strong>, nauli rafiki na <strong>uthibitisho wa PIN</strong> kwa abiria wote nchini Tanzania.
                     </p>
 
-                    <!-- Dual Primary CTAs (Pill-shaped) -->
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-                        <button onclick="handleAppDownload('passenger')" class="btn-pill-green inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full text-base font-extrabold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition">
-                            <i data-lucide="smartphone" class="w-5 h-5"></i>
+                    <!-- Dual Primary CTAs (Pill-shaped, Full-Width on Mobile) -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-1 sm:pt-2">
+                        <button onclick="handleAppDownload('passenger')" class="btn-pill-green w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-full text-sm sm:text-base font-extrabold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition">
+                            <i data-lucide="smartphone" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                             <span class="download-btn-rider" data-i18n="hero_btn_rider">Pakua App ya JOLT</span>
                             <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </button>
-                        <button onclick="handleAppDownload('driver')" class="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full border-2 border-slate-900 hover:bg-slate-900 hover:text-white text-slate-900 font-extrabold text-base transition">
-                            <i data-lucide="zap" class="w-5 h-5 text-[#0078D4]"></i>
+                        <button onclick="handleAppDownload('driver')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-full border-2 border-slate-900 hover:bg-slate-900 hover:text-white text-slate-900 font-extrabold text-sm sm:text-base transition">
+                            <i data-lucide="zap" class="w-4 h-4 sm:w-5 sm:h-5 text-[#0078D4]"></i>
                             <span class="download-btn-driver" data-i18n="hero_btn_driver">Kuwa Dereva (0%)</span>
                         </button>
                     </div>
@@ -369,41 +422,40 @@
                         <span data-i18n="hero_device_note">Inapatikana Google Play Store kwa Simu za Android (Bure)</span>
                     </div>
 
-                    <!-- Trust Metrics Grid (4 Key Indicators) -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t border-slate-100">
-                        <div>
-                            <div class="text-3xl font-black text-slate-900 tabular-nums">0%</div>
-                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mt-0.5" data-i18n="metric_1_title">Kamisheni ya Dereva</div>
-                            <div class="text-[11px] text-slate-400" data-i18n="metric_1_sub">100% ya nauli ni yako</div>
+                    <!-- Trust Metrics Grid (Clean Responsive Cards on Mobile) -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 pt-6 sm:pt-8 border-t border-slate-100">
+                        <div class="bg-slate-50/80 sm:bg-transparent p-3 sm:p-0 rounded-2xl sm:rounded-none border border-slate-100 sm:border-0">
+                            <div class="text-2xl sm:text-3xl font-black text-slate-900 tabular-nums">0%</div>
+                            <div class="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider mt-0.5" data-i18n="metric_1_title">Kamisheni ya Dereva</div>
+                            <div class="text-[10px] sm:text-[11px] text-slate-400" data-i18n="metric_1_sub">100% ya nauli ni yako</div>
                         </div>
-                        <div>
-                            <div class="text-3xl font-black text-slate-900 tabular-nums">&lt; 2 min</div>
-                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mt-0.5" data-i18n="metric_2_title">Muda wa Swap</div>
-                            <div class="text-[11px] text-slate-400" data-i18n="metric_2_sub">Betri mpya vituoni</div>
+                        <div class="bg-slate-50/80 sm:bg-transparent p-3 sm:p-0 rounded-2xl sm:rounded-none border border-slate-100 sm:border-0">
+                            <div class="text-2xl sm:text-3xl font-black text-slate-900 tabular-nums">&lt; 2 min</div>
+                            <div class="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider mt-0.5" data-i18n="metric_2_title">Muda wa Swap</div>
+                            <div class="text-[10px] sm:text-[11px] text-slate-400" data-i18n="metric_2_sub">Betri mpya vituoni</div>
                         </div>
-                        <div>
-                            <div class="text-3xl font-black text-slate-900 tabular-nums">100%</div>
-                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mt-0.5" data-i18n="metric_3_title">Uthibitisho wa PIN</div>
-                            <div class="text-[11px] text-slate-400" data-i18n="metric_3_sub">Safari salama kila mara</div>
+                        <div class="bg-slate-50/80 sm:bg-transparent p-3 sm:p-0 rounded-2xl sm:rounded-none border border-slate-100 sm:border-0">
+                            <div class="text-2xl sm:text-3xl font-black text-slate-900 tabular-nums">100%</div>
+                            <div class="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider mt-0.5" data-i18n="metric_3_title">Uthibitisho wa PIN</div>
+                            <div class="text-[10px] sm:text-[11px] text-slate-400" data-i18n="metric_3_sub">Safari salama kila mara</div>
                         </div>
-                        <div>
-                            <div class="text-3xl font-black text-[#0078D4] flex items-center gap-1 tabular-nums">
+                        <div class="bg-slate-50/80 sm:bg-transparent p-3 sm:p-0 rounded-2xl sm:rounded-none border border-slate-100 sm:border-0">
+                            <div class="text-2xl sm:text-3xl font-black text-[#0078D4] flex items-center gap-1 tabular-nums">
                                 <span>LATRA</span>
-                                <i data-lucide="check-circle" class="w-4 h-4 text-[#0078D4] inline"></i>
+                                <i data-lucide="check-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0078D4] inline"></i>
                             </div>
-                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mt-0.5" data-i18n="metric_4_title">Inakidhi Sheria</div>
-                            <div class="text-[11px] text-slate-400" data-i18n="metric_4_sub">Leseni & ukaguzi kamili</div>
+                            <div class="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider mt-0.5" data-i18n="metric_4_title">Inakidhi Sheria</div>
+                            <div class="text-[10px] sm:text-[11px] text-slate-400" data-i18n="metric_4_sub">Leseni & ukaguzi kamili</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: High-Resolution Real Lifestyle Showcase (JOLT Photography) -->
+                <!-- Right: High-Resolution Real Lifestyle Showcase (JOLT Photography - Responsive Container) -->
                 <div class="lg:col-span-6 relative">
-                    <!-- Responsive Photo Container -->
-                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-100 bg-slate-900 group">
+                    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl border border-slate-100 bg-slate-900 group">
                         <img src="/images/hero_boda.jpg" 
                              alt="Usafiri halisi wa Boda Boda Tanzania - JOLT" 
-                             class="w-full h-[400px] sm:h-[480px] lg:h-[520px] object-cover group-hover:scale-105 transition duration-700 ease-out">
+                             class="w-full h-64 sm:h-80 md:h-[420px] lg:h-[520px] object-cover group-hover:scale-105 transition duration-700 ease-out">
                     </div>
                 </div>
 
@@ -412,179 +464,179 @@
     </section>
 
     <!-- Partner & Fuel Stations Marquee with Real Vector Logos -->
-    <section class="py-10 bg-slate-50 border-y border-brand-slateBorder overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 mb-6 text-center">
-            <p class="text-xs font-extrabold tracking-wider text-slate-400 uppercase" data-i18n="partner_banner_title">
+    <section class="py-6 sm:py-10 bg-slate-50 border-y border-brand-slateBorder overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 mb-4 sm:mb-6 text-center">
+            <p class="text-[11px] sm:text-xs font-extrabold tracking-wider text-slate-400 uppercase" data-i18n="partner_banner_title">
                 Mtandao wa Nishati, Vituo vya Mafuta na Malipo ya Kidijitali Tanzania
             </p>
         </div>
         <div class="relative w-full overflow-hidden">
-            <div class="marquee-track flex items-center gap-12 sm:gap-16">
+            <div class="marquee-track flex items-center gap-8 sm:gap-16">
                 <!-- Set 1 -->
-                <div class="flex items-center gap-12 sm:gap-16 shrink-0 opacity-80 hover:opacity-100 transition">
-                    <span class="text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
-                        <i data-lucide="fuel" class="w-5 h-5 text-red-600"></i> PUMA ENERGY
+                <div class="flex items-center gap-8 sm:gap-16 shrink-0 opacity-80 hover:opacity-100 transition">
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
+                        <i data-lucide="fuel" class="w-4 h-4 sm:w-5 sm:h-5 text-red-600"></i> PUMA ENERGY
                     </span>
-                    <span class="text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
-                        <i data-lucide="zap" class="w-5 h-5 text-blue-600"></i> TOTALENERGIES
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4 sm:w-5 sm:h-5 text-blue-600"></i> TOTALENERGIES
                     </span>
-                    <span class="text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
-                        <i data-lucide="fuel" class="w-5 h-5 text-red-700"></i> ORYX ENERGIES
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
+                        <i data-lucide="fuel" class="w-4 h-4 sm:w-5 sm:h-5 text-red-700"></i> ORYX ENERGIES
                     </span>
-                    <span class="text-lg font-black tracking-tight text-red-600 flex items-center gap-2">
-                        <i data-lucide="wallet" class="w-5 h-5 text-red-600"></i> VODACOM M-PESA
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-red-600 flex items-center gap-2">
+                        <i data-lucide="wallet" class="w-4 h-4 sm:w-5 sm:h-5 text-red-600"></i> VODACOM M-PESA
                     </span>
-                    <span class="text-lg font-black tracking-tight text-blue-600 flex items-center gap-2">
-                        <i data-lucide="credit-card" class="w-5 h-5 text-blue-600"></i> TIGO PESA
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-blue-600 flex items-center gap-2">
+                        <i data-lucide="credit-card" class="w-4 h-4 sm:w-5 sm:h-5 text-blue-600"></i> TIGO PESA
                     </span>
-                    <span class="text-lg font-black tracking-tight text-red-700 flex items-center gap-2">
-                        <i data-lucide="banknote" class="w-5 h-5 text-red-700"></i> AIRTEL MONEY
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-red-700 flex items-center gap-2">
+                        <i data-lucide="banknote" class="w-4 h-4 sm:w-5 sm:h-5 text-red-700"></i> AIRTEL MONEY
                     </span>
-                    <span class="text-lg font-black tracking-tight text-[#0078D4] flex items-center gap-2">
-                        <i data-lucide="shield-check" class="w-5 h-5 text-[#0078D4]"></i> LATRA REGULATED
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-[#0078D4] flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 sm:w-5 sm:h-5 text-[#0078D4]"></i> LATRA REGULATED
                     </span>
-                    <span class="text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
-                        <i data-lucide="landmark" class="w-5 h-5 text-slate-700"></i> CRDB BANK
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
+                        <i data-lucide="landmark" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-700"></i> CRDB BANK
                     </span>
-                    <span class="text-lg font-black tracking-tight text-amber-600 flex items-center gap-2">
-                        <i data-lucide="landmark" class="w-5 h-5 text-amber-600"></i> NMB BANK
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-amber-600 flex items-center gap-2">
+                        <i data-lucide="landmark" class="w-4 h-4 sm:w-5 sm:h-5 text-amber-600"></i> NMB BANK
                     </span>
                 </div>
                 <!-- Set 2 (Infinite duplicate) -->
-                <div class="flex items-center gap-12 sm:gap-16 shrink-0 opacity-80 hover:opacity-100 transition">
-                    <span class="text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
-                        <i data-lucide="fuel" class="w-5 h-5 text-red-600"></i> PUMA ENERGY
+                <div class="flex items-center gap-8 sm:gap-16 shrink-0 opacity-80 hover:opacity-100 transition">
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
+                        <i data-lucide="fuel" class="w-4 h-4 sm:w-5 sm:h-5 text-red-600"></i> PUMA ENERGY
                     </span>
-                    <span class="text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
-                        <i data-lucide="zap" class="w-5 h-5 text-blue-600"></i> TOTALENERGIES
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4 sm:w-5 sm:h-5 text-blue-600"></i> TOTALENERGIES
                     </span>
-                    <span class="text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
-                        <i data-lucide="fuel" class="w-5 h-5 text-red-700"></i> ORYX ENERGIES
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
+                        <i data-lucide="fuel" class="w-4 h-4 sm:w-5 sm:h-5 text-red-700"></i> ORYX ENERGIES
                     </span>
-                    <span class="text-lg font-black tracking-tight text-red-600 flex items-center gap-2">
-                        <i data-lucide="wallet" class="w-5 h-5 text-red-600"></i> VODACOM M-PESA
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-red-600 flex items-center gap-2">
+                        <i data-lucide="wallet" class="w-4 h-4 sm:w-5 sm:h-5 text-red-600"></i> VODACOM M-PESA
                     </span>
-                    <span class="text-lg font-black tracking-tight text-blue-600 flex items-center gap-2">
-                        <i data-lucide="credit-card" class="w-5 h-5 text-blue-600"></i> TIGO PESA
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-blue-600 flex items-center gap-2">
+                        <i data-lucide="credit-card" class="w-4 h-4 sm:w-5 sm:h-5 text-blue-600"></i> TIGO PESA
                     </span>
-                    <span class="text-lg font-black tracking-tight text-red-700 flex items-center gap-2">
-                        <i data-lucide="banknote" class="w-5 h-5 text-red-700"></i> AIRTEL MONEY
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-red-700 flex items-center gap-2">
+                        <i data-lucide="banknote" class="w-4 h-4 sm:w-5 sm:h-5 text-red-700"></i> AIRTEL MONEY
                     </span>
-                    <span class="text-lg font-black tracking-tight text-[#0078D4] flex items-center gap-2">
-                        <i data-lucide="shield-check" class="w-5 h-5 text-[#0078D4]"></i> LATRA REGULATED
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-[#0078D4] flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 sm:w-5 sm:h-5 text-[#0078D4]"></i> LATRA REGULATED
                     </span>
-                    <span class="text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
-                        <i data-lucide="landmark" class="w-5 h-5 text-slate-700"></i> CRDB BANK
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-slate-800 flex items-center gap-2">
+                        <i data-lucide="landmark" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-700"></i> CRDB BANK
                     </span>
-                    <span class="text-lg font-black tracking-tight text-amber-600 flex items-center gap-2">
-                        <i data-lucide="landmark" class="w-5 h-5 text-amber-600"></i> NMB BANK
+                    <span class="text-sm sm:text-lg font-black tracking-tight text-amber-600 flex items-center gap-2">
+                        <i data-lucide="landmark" class="w-4 h-4 sm:w-5 sm:h-5 text-amber-600"></i> NMB BANK
                     </span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- JOLT Services Grid (Huduma Zetu) with High-Res Photography -->
-    <section class="py-20 bg-slate-50 border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="max-w-3xl mb-12 space-y-3">
-                <h2 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+    <!-- JOLT Services Grid (Huduma Zetu - Spacious & Responsive) -->
+    <section class="py-14 sm:py-20 bg-slate-50 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mb-8 sm:mb-12 space-y-2.5 sm:space-y-3">
+                <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
                     Huduma zetu za kila siku.
                 </h2>
-                <p class="text-slate-600 text-base sm:text-lg">
+                <p class="text-slate-600 text-sm sm:text-base lg:text-lg leading-relaxed">
                     Usafiri wa kuaminika, nishati safi na 0% kamisheni kwa madereva wote nchini Tanzania.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <!-- Service 1: Rides -->
-                <div class="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 overflow-hidden relative">
+                <div class="bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group">
+                    <div class="h-48 sm:h-52 lg:h-56 overflow-hidden relative">
                         <img src="/images/passenger_booking.jpg" 
                              alt="Safari za Kila Siku JOLT - Abiria akiagiza usafiri" 
                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
                         <div class="space-y-2">
-                            <h3 class="text-xl font-black text-slate-900 group-hover:text-[#0078D4] transition">
+                            <h3 class="text-lg sm:text-xl font-black text-slate-900 group-hover:text-[#0078D4] transition">
                                 Safari za Kila Siku
                             </h3>
                             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                                 Agiza Boda au gari kwa sekunde. Uthibitisho wa PIN kabla ya safari kuanza kuhakikisha usalama wako 100%.
                             </p>
                         </div>
-                        <a href="#abiria" class="inline-flex items-center gap-1.5 text-xs font-black text-[#0078D4] hover:text-[#005a9e] transition pt-2">
+                        <a href="#abiria" class="inline-flex items-center gap-1.5 text-xs font-black text-[#0078D4] hover:text-[#005a9e] transition pt-1">
                             <span>Soma Zaidi</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Service 2: Drivers (0% Commission) -->
-                <div class="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 overflow-hidden relative">
+                <div class="bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group">
+                    <div class="h-48 sm:h-52 lg:h-56 overflow-hidden relative">
                         <img src="/images/service_driver.jpg" 
                              alt="Madereva wa JOLT 0% Kamisheni" 
                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
                         <div class="space-y-2">
-                            <h3 class="text-xl font-black text-slate-900 group-hover:text-[#0078D4] transition">
+                            <h3 class="text-lg sm:text-xl font-black text-slate-900 group-hover:text-[#0078D4] transition">
                                 Madereva (0% Makato)
                             </h3>
                             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                                 Weka kipato chako chote mfukoni. JOLT haikati hata shilingi 1 ya kamisheni kutoka kwa jasho la dereva.
                             </p>
                         </div>
-                        <a href="#dereva" class="inline-flex items-center gap-1.5 text-xs font-black text-[#0078D4] hover:text-[#005a9e] transition pt-2">
+                        <a href="#dereva" class="inline-flex items-center gap-1.5 text-xs font-black text-[#0078D4] hover:text-[#005a9e] transition pt-1">
                             <span>Jiunge Kama Dereva</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Service 3: EV Battery Swap -->
-                <div class="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 overflow-hidden relative">
+                <div class="bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group">
+                    <div class="h-48 sm:h-52 lg:h-56 overflow-hidden relative">
                         <img src="/images/service_swap.jpg" 
                              alt="Kituo cha EV Battery Swap JOLT" 
                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
                         <div class="space-y-2">
-                            <h3 class="text-xl font-black text-slate-900 group-hover:text-[#0078D4] transition">
+                            <h3 class="text-lg sm:text-xl font-black text-slate-900 group-hover:text-[#0078D4] transition">
                                 Vituo vya Betri (EV)
                             </h3>
                             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                                 Badili betri ya pikipiki ya umeme kwa chini ya dakika 2 kwenye vituo vya Puma, Total na Oryx nchini kote.
                             </p>
                         </div>
-                        <a href="#swap" class="inline-flex items-center gap-1.5 text-xs font-black text-[#0078D4] hover:text-[#005a9e] transition pt-2">
+                        <a href="#swap" class="inline-flex items-center gap-1.5 text-xs font-black text-[#0078D4] hover:text-[#005a9e] transition pt-1">
                             <span>Tazama Vituo</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Service 4: 3-Wheeler Bajaji -->
-                <div class="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 overflow-hidden relative">
+                <div class="bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group">
+                    <div class="h-48 sm:h-52 lg:h-56 overflow-hidden relative">
                         <img src="/images/service_bajaj.jpg" 
                              alt="Bajaji za Kisasa JOLT Tanzania" 
                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
                         <div class="space-y-2">
-                            <h3 class="text-xl font-black text-slate-900 group-hover:text-[#0078D4] transition">
+                            <h3 class="text-lg sm:text-xl font-black text-slate-900 group-hover:text-[#0078D4] transition">
                                 Bajaji & Mizigo
                             </h3>
                             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                                 Usafiri wenye nafasi, starehe na unafuu kwa abiria hadi 3 au usafirishaji wa haraka wa vifurushi mtaani.
                             </p>
                         </div>
-                        <a href="#vyombo" class="inline-flex items-center gap-1.5 text-xs font-black text-[#0078D4] hover:text-[#005a9e] transition pt-2">
+                        <a href="#vyombo" class="inline-flex items-center gap-1.5 text-xs font-black text-[#0078D4] hover:text-[#005a9e] transition pt-1">
                             <span>Chagua Chombo</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         </a>
                     </div>
                 </div>
@@ -593,138 +645,138 @@
     </section>
 
     <!-- Multi-Vehicle Fleet Switcher with Real Photography -->
-    <section id="vyombo" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
+    <section id="vyombo" class="py-14 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
-                <h2 class="text-3xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="fleet_heading">
+            <div class="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="fleet_heading">
                     Inafaa kwa Aina Zote za Vyombo vya Usafiri Tanzania
                 </h2>
-                <p class="text-slate-600 text-base sm:text-lg" data-i18n="fleet_subtitle">
+                <p class="text-slate-600 text-sm sm:text-base lg:text-lg" data-i18n="fleet_subtitle">
                     Mfumo mmoja unaojumuisha pikipiki za kawaida, bajaji za magurudumu matatu, pikipiki safi za umeme na usafirishaji wa mizigo.
                 </p>
 
-                <!-- Vehicle Switcher Tabs -->
-                <div class="flex flex-wrap justify-center gap-2 pt-4" id="vehicle-tabs">
-                    <button onclick="switchVehicle('boda')" id="tab-boda" class="vehicle-tab-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-extrabold bg-brand-obsidian text-white transition shadow-sm">
-                        <i data-lucide="bike" class="w-4 h-4"></i>
+                <!-- Vehicle Switcher Tabs (Swipeable on Mobile) -->
+                <div class="flex overflow-x-auto no-scrollbar sm:flex-wrap sm:justify-center gap-2 pt-3 pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0" id="vehicle-tabs">
+                    <button onclick="switchVehicle('boda')" id="tab-boda" class="vehicle-tab-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-extrabold bg-brand-obsidian text-white transition shadow-xs">
+                        <i data-lucide="bike" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         <span data-i18n="tab_boda">Boda Boda (Petroli)</span>
                     </button>
-                    <button onclick="switchVehicle('bajaji')" id="tab-bajaji" class="vehicle-tab-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-                        <i data-lucide="car" class="w-4 h-4"></i>
+                    <button onclick="switchVehicle('bajaji')" id="tab-bajaji" class="vehicle-tab-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        <i data-lucide="car" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         <span data-i18n="tab_bajaji">Bajaji (3-Wheeler)</span>
                     </button>
-                    <button onclick="switchVehicle('umeme')" id="tab-umeme" class="vehicle-tab-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-                        <i data-lucide="zap" class="w-4 h-4"></i>
+                    <button onclick="switchVehicle('umeme')" id="tab-umeme" class="vehicle-tab-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        <i data-lucide="zap" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         <span data-i18n="tab_umeme">Umeme (EV & Swap)</span>
                     </button>
-                    <button onclick="switchVehicle('cab')" id="tab-cab" class="vehicle-tab-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-                        <i data-lucide="car" class="w-4 h-4"></i>
+                    <button onclick="switchVehicle('cab')" id="tab-cab" class="vehicle-tab-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        <i data-lucide="car" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         <span data-i18n="tab_cab">Gari Ndogo (JOLT Cab)</span>
                     </button>
-                    <button onclick="switchVehicle('kifurushi')" id="tab-kifurushi" class="vehicle-tab-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-                        <i data-lucide="package" class="w-4 h-4"></i>
+                    <button onclick="switchVehicle('kifurushi')" id="tab-kifurushi" class="vehicle-tab-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        <i data-lucide="package" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         <span data-i18n="tab_delivery">JOLT Delivery & Fleet</span>
                     </button>
                 </div>
             </div>
 
             <!-- Dynamic Vehicle Card Content with Real Photography -->
-            <div class="bg-brand-slateBg rounded-3xl p-8 lg:p-12 border border-slate-200">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center" id="vehicle-content">
+            <div class="bg-brand-slateBg rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 border border-slate-200">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center" id="vehicle-content">
                     
                     <!-- Content Left -->
-                    <div class="lg:col-span-7 space-y-5">
-                        <h3 class="text-2xl sm:text-3xl font-black text-brand-obsidian" id="v-title">
+                    <div class="lg:col-span-7 space-y-4 sm:space-y-5">
+                        <h3 class="text-xl sm:text-2xl lg:text-3xl font-black text-brand-obsidian" id="v-title">
                             Boda Boda ya Petroli: Kukwepa Foleni kwa Urahisi
                         </h3>
-                        <p class="text-slate-600 leading-relaxed text-base" id="v-desc">
+                        <p class="text-slate-600 leading-relaxed text-sm sm:text-base" id="v-desc">
                             Chaguo maarufu zaidi la safari za haraka za mtaani na maeneo yenye msongamano wa magari. Dereva anafanya kazi kwa uhuru bila makato ya kamisheni (0%), na abiria anapata safari salama yenye nambari ya PIN.
                         </p>
                         
                         <!-- Real Feature Bullets with Vector Icons -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-1 sm:pt-2">
                             <div class="flex items-start gap-3">
-                                <div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-brand-obsidian shrink-0">
+                                <div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-white shrink-0 mt-0.5">
                                     <i data-lucide="check" class="w-3.5 h-3.5"></i>
                                 </div>
                                 <div>
-                                    <div class="font-bold text-sm text-brand-obsidian" data-i18n="feat_fare_title">Nauli kuanzia TZS 1,000</div>
-                                    <div class="text-xs text-slate-500" data-i18n="feat_fare_desc">Bei wazi inayomlinda abiria na dereva</div>
+                                    <div class="font-bold text-xs sm:text-sm text-brand-obsidian" data-i18n="feat_fare_title">Nauli kuanzia TZS 1,000</div>
+                                    <div class="text-[11px] sm:text-xs text-slate-500" data-i18n="feat_fare_desc">Bei wazi inayomlinda abiria na dereva</div>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
-                                <div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-brand-obsidian shrink-0">
+                                <div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-white shrink-0 mt-0.5">
                                     <i data-lucide="check" class="w-3.5 h-3.5"></i>
                                 </div>
                                 <div>
-                                    <div class="font-bold text-sm text-brand-obsidian" data-i18n="feat_fuel_title">Punguzo la 4% la Mafuta</div>
-                                    <div class="text-xs text-slate-500" data-i18n="feat_fuel_desc">Vituo vya Puma, Total na Oryx</div>
+                                    <div class="font-bold text-xs sm:text-sm text-brand-obsidian" data-i18n="feat_fuel_title">Punguzo la 4% la Mafuta</div>
+                                    <div class="text-[11px] sm:text-xs text-slate-500" data-i18n="feat_fuel_desc">Vituo vya Puma, Total na Oryx</div>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
-                                <div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-brand-obsidian shrink-0">
+                                <div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-white shrink-0 mt-0.5">
                                     <i data-lucide="check" class="w-3.5 h-3.5"></i>
                                 </div>
                                 <div>
-                                    <div class="font-bold text-sm text-brand-obsidian" data-i18n="feat_helmet_title">Kofia Ngumu (Helmeti) 2</div>
-                                    <div class="text-xs text-slate-500" data-i18n="feat_helmet_desc">Usalama wa abiria na dereva kisheria</div>
+                                    <div class="font-bold text-xs sm:text-sm text-brand-obsidian" data-i18n="feat_helmet_title">Kofia Ngumu (Helmeti) 2</div>
+                                    <div class="text-[11px] sm:text-xs text-slate-500" data-i18n="feat_helmet_desc">Usalama wa abiria na dereva kisheria</div>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
-                                <div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-brand-obsidian shrink-0">
+                                <div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-white shrink-0 mt-0.5">
                                     <i data-lucide="check" class="w-3.5 h-3.5"></i>
                                 </div>
                                 <div>
-                                    <div class="font-bold text-sm text-brand-obsidian" data-i18n="feat_stands_title">Mfumo wa Vijiwe Rasmi</div>
-                                    <div class="text-xs text-slate-500" data-i18n="feat_stands_desc">Ushirikiano na viongozi wa kijiwe</div>
+                                    <div class="font-bold text-xs sm:text-sm text-brand-obsidian" data-i18n="feat_stands_title">Mfumo wa Vijiwe Rasmi</div>
+                                    <div class="text-[11px] sm:text-xs text-slate-500" data-i18n="feat_stands_desc">Ushirikiano na viongozi wa kijiwe</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="pt-4 flex items-center gap-4">
-                            <a href="#pakua" class="btn-pill-green inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-extrabold">
+                        <div class="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                            <a href="#abiria" class="btn-pill-green inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-xs sm:text-sm font-extrabold text-center">
                                 <span data-i18n="btn_rider_app">Pakua App ya Abiria</span>
                                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
                             </a>
-                            <a href="#pakua" class="btn-pill-outline inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-extrabold">
+                            <a href="#dereva" class="btn-pill-outline inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-xs sm:text-sm font-extrabold text-center">
                                 <span data-i18n="btn_become_driver">Kuwa Dereva</span>
                             </a>
                         </div>
                     </div>
 
                     <!-- Content Right: Real Photography Card with Specs -->
-                    <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
                         <!-- Real Vehicle Photo -->
-                        <div class="relative h-52 w-full overflow-hidden bg-slate-900">
+                        <div class="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-900">
                             <img id="v-image" 
                                  src="/images/hero_boda.jpg" 
                                  alt="Chombo halisi cha JOLT Tanzania" 
                                  class="w-full h-full object-cover transition duration-300">
                         </div>
-                        <div class="px-6 pt-4 pb-1">
-                            <span class="inline-block text-[11px] font-extrabold text-[#0078D4] uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full" id="v-tag">
+                        <div class="px-5 sm:px-6 pt-4 pb-1">
+                            <span class="inline-block text-[10px] sm:text-[11px] font-extrabold text-[#0078D4] uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full" id="v-tag">
                                 Dar es Salaam & Pwani Fleet • Boxer 150 Boda
                             </span>
                         </div>
 
                         <!-- Technical Specs Grid -->
-                        <div class="p-6 space-y-3.5 divide-y divide-slate-100">
+                        <div class="p-5 sm:p-6 space-y-3 divide-y divide-slate-100">
                             <div class="flex items-center justify-between pt-1">
-                                <span class="text-sm font-semibold text-slate-600" data-i18n="spec_type_label">Aina ya Chombo:</span>
-                                <span class="text-sm font-black text-brand-obsidian" id="spec-type">Pikipiki (125cc - 150cc)</span>
+                                <span class="text-xs sm:text-sm font-semibold text-slate-600" data-i18n="spec_type_label">Aina ya Chombo:</span>
+                                <span class="text-xs sm:text-sm font-black text-brand-obsidian" id="spec-type">Pikipiki (125cc - 150cc)</span>
                             </div>
-                            <div class="flex items-center justify-between pt-3">
-                                <span class="text-sm font-semibold text-slate-600" data-i18n="spec_comm_label">Kamisheni ya JOLT:</span>
-                                <span class="text-xs font-black text-brand-greenDark bg-brand-green/20 px-2.5 py-1 rounded-md" data-i18n="spec_comm_value">0% (BURE)</span>
+                            <div class="flex items-center justify-between pt-2.5">
+                                <span class="text-xs sm:text-sm font-semibold text-slate-600" data-i18n="spec_comm_label">Kamisheni ya JOLT:</span>
+                                <span class="text-[11px] sm:text-xs font-black text-[#0078D4] bg-blue-50 px-2.5 py-1 rounded-md" data-i18n="spec_comm_value">0% (BURE)</span>
                             </div>
-                            <div class="flex items-center justify-between pt-3">
-                                <span class="text-sm font-semibold text-slate-600" data-i18n="spec_eta_label">Wastani wa Kufika:</span>
-                                <span class="text-sm font-black text-brand-obsidian" id="spec-eta">Dk 2 - 4</span>
+                            <div class="flex items-center justify-between pt-2.5">
+                                <span class="text-xs sm:text-sm font-semibold text-slate-600" data-i18n="spec_eta_label">Wastani wa Kufika:</span>
+                                <span class="text-xs sm:text-sm font-black text-brand-obsidian" id="spec-eta">Dk 2 - 4</span>
                             </div>
-                            <div class="flex items-center justify-between pt-3">
-                                <span class="text-sm font-semibold text-slate-600" data-i18n="spec_payment_label">Njia za Malipo:</span>
-                                <span class="text-sm font-black text-brand-obsidian" data-i18n="spec_payment_value">M-Pesa, Tigo Pesa, Cash</span>
+                            <div class="flex items-center justify-between pt-2.5">
+                                <span class="text-xs sm:text-sm font-semibold text-slate-600" data-i18n="spec_payment_label">Njia za Malipo:</span>
+                                <span class="text-xs sm:text-sm font-black text-brand-obsidian" data-i18n="spec_payment_value">M-Pesa, Tigo Pesa, Cash</span>
                             </div>
                         </div>
                     </div>
@@ -736,22 +788,22 @@
     </section>
 
     <!-- JOLT Official Fleet & Cabs Showcase (Real Lifestyle Photography) -->
-    <section class="py-20 bg-white border-y border-slate-100">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+    <section class="py-14 sm:py-20 bg-white border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-5 sm:gap-6">
                 <div class="space-y-3 max-w-2xl">
-                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
                         Magari Safi ya Kisasa kwa Safari za Uhakika Tanzania
                     </h2>
-                    <p class="text-slate-600 text-base">
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
                         Kila chombo cha JOLT kimetambulika kwa alama rasmi ya bluu ya JOLT, dereva aliyethibitishwa na LATRA, na ulinzi kamili wa bima na nambari ya siri ya PIN.
                     </p>
                 </div>
-                <div class="flex items-center gap-3 shrink-0">
-                    <a href="#abiria" class="px-6 py-3 rounded-full bg-[#0078D4] text-white text-xs font-black hover:bg-[#005a9e] transition shadow-md shadow-[#0078D4]/20">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+                    <a href="#abiria" class="px-5 sm:px-6 py-3 rounded-full bg-[#0078D4] text-white text-xs font-black hover:bg-[#005a9e] transition text-center shadow-md shadow-[#0078D4]/20">
                         Agiza Usafiri Sasa
                     </a>
-                    <a href="#dereva" class="px-6 py-3 rounded-full border border-slate-300 text-slate-700 text-xs font-black hover:bg-slate-50 transition">
+                    <a href="#dereva" class="px-5 sm:px-6 py-3 rounded-full border border-slate-300 text-slate-700 text-xs font-black hover:bg-slate-50 transition text-center">
                         Kuwa Dereva wa Gari (0%)
                     </a>
                 </div>
@@ -832,36 +884,36 @@
     </section>
 
     <!-- The 3 Core Platform Pillars (Real Photography & Enterprise Grade) -->
-    <section id="suluhisho" class="py-20 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-6 space-y-24">
+    <section id="suluhisho" class="py-14 sm:py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-24">
             
-            <div class="text-center max-w-3xl mx-auto space-y-4">
-                <h2 class="text-3xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="pillars_heading">
+            <div class="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
+                <h2 class="text-2xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="pillars_heading">
                     Suluhisho Kamili la Kielektroniki la Usafiri Tanzania
                 </h2>
-                <p class="text-slate-600 text-base sm:text-lg" data-i18n="pillars_subtitle">
+                <p class="text-slate-600 text-sm sm:text-base lg:text-lg leading-relaxed" data-i18n="pillars_subtitle">
                     Teknolojia yetu inajenga mazingira bora kwa abiria, mapato endelevu kwa madereva, na miundombinu safi ya nishati ya umeme.
                 </p>
             </div>
 
             <!-- Pillar 1: App ya Abiria (Rider App with Real Commuter Photo) -->
-            <div id="abiria" class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <div class="lg:col-span-6 space-y-6">
-                    <h3 class="text-3xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="p1_title">
+            <div id="abiria" class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                <div class="lg:col-span-6 space-y-5 sm:space-y-6">
+                    <h3 class="text-2xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="p1_title">
                         Safari za Haraka, Nauli Nafuu na Usalama Unaoweza Kuutegemea
                     </h3>
-                    <p class="text-slate-600 leading-relaxed" data-i18n="p1_desc">
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed" data-i18n="p1_desc">
                         App ya kisasa na rahisi kutumia kwenye simu yoyote ya Android. Inakuwezesha kuagiza usafiri kwa sekunde chache, kuona bei kabla ya kuanza safari, na kulinda usalama wako kupitia nambari ya siri ya tarakimu nne (PIN).
                     </p>
                     
-                    <div class="space-y-4 pt-2">
+                    <div class="space-y-3.5 sm:space-y-4 pt-2">
                         <div class="flex items-start gap-3.5">
                             <div class="w-8 h-8 rounded-xl bg-brand-green flex items-center justify-center text-brand-obsidian font-black text-sm shrink-0">
                                 <i data-lucide="key" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-brand-obsidian" data-i18n="p1_f1_title">Uthibitisho wa Nambari ya PIN (Anti-Fraud)</h4>
-                                <p class="text-xs text-slate-500 mt-0.5" data-i18n="p1_f1_desc">Dereva hawezi kuanzisha safari bila wewe kumpa nambari ya PIN. Hii inazuia mtu mwingine kuchukua chombo chako.</p>
+                                <h4 class="font-bold text-sm sm:text-base text-brand-obsidian" data-i18n="p1_f1_title">Uthibitisho wa Nambari ya PIN (Anti-Fraud)</h4>
+                                <p class="text-xs text-slate-500 mt-0.5 leading-relaxed" data-i18n="p1_f1_desc">Dereva hawezi kuanzisha safari bila wewe kumpa nambari ya PIN. Hii inazuia mtu mwingine kuchukua chombo chako.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3.5">
@@ -869,8 +921,8 @@
                                 <i data-lucide="navigation" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-brand-obsidian" data-i18n="p1_f2_title">Ufuatiliaji wa Safari Mubashara (Live GPS Tracking)</h4>
-                                <p class="text-xs text-slate-500 mt-0.5" data-i18n="p1_f2_desc">Shiriki safari yako kwa mbofyo mmoja na familia au marafiki ili wajue ulipo kila sekunde.</p>
+                                <h4 class="font-bold text-sm sm:text-base text-brand-obsidian" data-i18n="p1_f2_title">Ufuatiliaji wa Safari Mubashara (Live GPS Tracking)</h4>
+                                <p class="text-xs text-slate-500 mt-0.5 leading-relaxed" data-i18n="p1_f2_desc">Shiriki safari yako kwa mbofyo mmoja na familia au marafiki ili wajue ulipo kila sekunde.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3.5">
@@ -878,14 +930,14 @@
                                 <i data-lucide="credit-card" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-brand-obsidian" data-i18n="p1_f3_title">Malipo ya M-Pesa, Tigo Pesa au Cash</h4>
-                                <p class="text-xs text-slate-500 mt-0.5" data-i18n="p1_f3_desc">Lipa bila usumbufu wa chenji au tozo za ziada. Risiti ya kidijitali inatumwa moja kwa moja.</p>
+                                <h4 class="font-bold text-sm sm:text-base text-brand-obsidian" data-i18n="p1_f3_title">Malipo ya M-Pesa, Tigo Pesa au Cash</h4>
+                                <p class="text-xs text-slate-500 mt-0.5 leading-relaxed" data-i18n="p1_f3_desc">Lipa bila usumbufu wa chenji au tozo za ziada. Risiti ya kidijitali inatumwa moja kwa moja.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="pt-4 flex flex-wrap items-center gap-3">
-                        <button onclick="handleAppDownload('passenger')" class="btn-pill-green inline-flex items-center gap-2 px-6 py-3 rounded-full font-extrabold text-sm">
+                    <div class="pt-3 sm:pt-4 flex flex-wrap items-center gap-3">
+                        <button onclick="handleAppDownload('passenger')" class="btn-pill-green inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-extrabold text-xs sm:text-sm w-full sm:w-auto">
                             <i data-lucide="smartphone" class="w-4 h-4"></i>
                             <span data-i18n="p1_btn">Pata App ya Abiria (Google Play)</span>
                         </button>
@@ -893,15 +945,15 @@
                 </div>
 
                 <!-- Real Hardware Smartphone Device (Driver App Interface - Matching Image 2 Style with JOLT Blue) -->
-                <div class="lg:col-span-6 flex justify-center">
-                    <div class="relative w-full max-w-[340px] sm:max-w-[360px]">
+                <div class="lg:col-span-6 flex justify-center w-full">
+                    <div class="relative w-full max-w-[295px] xs:max-w-[320px] sm:max-w-[360px] mx-auto">
                         <!-- Subtle Ambient Glow -->
                         <div class="absolute -inset-4 bg-[#0078D4]/15 rounded-[52px] blur-3xl pointer-events-none"></div>
 
                         <!-- iPhone Pro Hardware Frame -->
-                        <div class="relative rounded-[48px] p-3 shadow-2xl border-[5px] border-slate-900 bg-slate-950 ring-1 ring-slate-800">
+                        <div class="relative rounded-[42px] sm:rounded-[48px] p-2.5 sm:p-3 shadow-2xl border-[4px] sm:border-[5px] border-slate-900 bg-slate-950 ring-1 ring-slate-800">
                             <!-- Inner Screen -->
-                            <div class="relative rounded-[40px] bg-white overflow-hidden text-slate-900 flex flex-col shadow-inner">
+                            <div class="relative rounded-[34px] sm:rounded-[40px] bg-white overflow-hidden text-slate-900 flex flex-col shadow-inner">
                                 
                                 <!-- iPhone Dynamic Island & Status Bar -->
                                 <div class="relative pt-3 pb-2 px-6 flex items-center justify-between text-xs font-semibold z-20 bg-slate-50/80 backdrop-blur-md">
@@ -1079,32 +1131,32 @@
             </div>
 
             <!-- Pillar 2: App ya Dereva (Driver Partner App with Real Driver Photo) -->
-            <div id="dereva" class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div id="dereva" class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 <!-- Real Driver Photo -->
                 <div class="lg:col-span-6 order-2 lg:order-1">
-                    <div class="rounded-3xl overflow-hidden border border-slate-200 shadow-xl relative bg-slate-900 group">
+                    <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-xl relative bg-slate-900 group">
                         <img src="/images/service_driver.jpg" 
                              alt="Dereva halisi wa Boda Boda mwenye leseni na helmeti" 
-                             class="w-full h-[420px] object-cover group-hover:scale-105 transition duration-500">
+                             class="w-full h-64 sm:h-80 md:h-[420px] object-cover group-hover:scale-105 transition duration-500">
                     </div>
                 </div>
 
-                <div class="lg:col-span-6 order-1 lg:order-2 space-y-6">
-                    <h3 class="text-3xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="p2_title">
+                <div class="lg:col-span-6 order-1 lg:order-2 space-y-5 sm:space-y-6">
+                    <h3 class="text-2xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="p2_title">
                         0% Kamisheni. Jasho Lako 100% Ni Lako na Familia Yako!
                     </h3>
-                    <p class="text-slate-600 leading-relaxed" data-i18n="p2_desc">
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed" data-i18n="p2_desc">
                         Mifumo mingine inakata 15% hadi 25% ya kila safari unayofanya kwa jasho lako. <strong>JOLT haikati hata shilingi moja!</strong> Unalipwa nauli yako yote moja kwa moja mkononi au kwenye M-Pesa.
                     </p>
 
-                    <div class="space-y-4 pt-2">
+                    <div class="space-y-3.5 sm:space-y-4 pt-2">
                         <div class="flex items-start gap-3.5">
                             <div class="w-8 h-8 rounded-xl bg-brand-green flex items-center justify-center text-brand-obsidian font-black text-sm shrink-0">
                                 <i data-lucide="check" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-brand-obsidian" data-i18n="p2_f1_title">Hakuna Ada ya Safari (Platform Fee = TZS 0)</h4>
-                                <p class="text-xs text-slate-500 mt-0.5" data-i18n="p2_f1_desc">Ukiingiza TZS 60,000 kwa siku, zote TZS 60,000 ni zako. Hakuna makato ya siri.</p>
+                                <h4 class="font-bold text-sm sm:text-base text-brand-obsidian" data-i18n="p2_f1_title">Hakuna Ada ya Safari (Platform Fee = TZS 0)</h4>
+                                <p class="text-xs text-slate-500 mt-0.5 leading-relaxed" data-i18n="p2_f1_desc">Ukiingiza TZS 60,000 kwa siku, zote TZS 60,000 ni zako. Hakuna makato ya siri.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3.5">
@@ -1112,8 +1164,8 @@
                                 <i data-lucide="map-pin" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-brand-obsidian" data-i18n="p2_f2_title">Ushirikiano na Vijiwe vya Boda (Stand System)</h4>
-                                <p class="text-xs text-slate-500 mt-0.5" data-i18n="p2_f2_desc">Mfumo unalinda utaratibu wa foleni ya kijiwe chako bila fujo au ada haramu za mtaani.</p>
+                                <h4 class="font-bold text-sm sm:text-base text-brand-obsidian" data-i18n="p2_f2_title">Ushirikiano na Vijiwe vya Boda (Stand System)</h4>
+                                <p class="text-xs text-slate-500 mt-0.5 leading-relaxed" data-i18n="p2_f2_desc">Mfumo unalinda utaratibu wa foleni ya kijiwe chako bila fujo au ada haramu za mtaani.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3.5">
@@ -1121,14 +1173,14 @@
                                 <i data-lucide="fuel" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-brand-obsidian" data-i18n="p2_f3_title">Punguzo la 4% la Mafuta Vituoni</h4>
-                                <p class="text-xs text-slate-500 mt-0.5" data-i18n="p2_f3_desc">Madereva wa JOLT wanapata bei maalum ya mafuta kwenye vituo vya Puma, TotalEnergies na Oryx.</p>
+                                <h4 class="font-bold text-sm sm:text-base text-brand-obsidian" data-i18n="p2_f3_title">Punguzo la 4% la Mafuta Vituoni</h4>
+                                <p class="text-xs text-slate-500 mt-0.5 leading-relaxed" data-i18n="p2_f3_desc">Madereva wa JOLT wanapata bei maalum ya mafuta kwenye vituo vya Puma, TotalEnergies na Oryx.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="pt-4 flex flex-wrap items-center gap-3">
-                        <button onclick="handleAppDownload('driver')" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-obsidian text-white font-extrabold text-sm hover:bg-slate-800 transition">
+                    <div class="pt-3 sm:pt-4 flex flex-wrap items-center gap-3">
+                        <button onclick="handleAppDownload('driver')" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-brand-obsidian text-white font-extrabold text-xs sm:text-sm hover:bg-slate-800 transition w-full sm:w-auto">
                             <i data-lucide="zap" class="w-4 h-4 text-brand-primary"></i>
                             <span data-i18n="p2_btn">Pata App ya Dereva (Google Play)</span>
                         </button>
@@ -1137,45 +1189,45 @@
             </div>
 
             <!-- Pillar 3: JOLT Swap & Clean EV Energy Network -->
-            <div id="swap" class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <div class="lg:col-span-6 space-y-6">
-                    <h3 class="text-3xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="p3_title">
+            <div id="swap" class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                <div class="lg:col-span-6 space-y-5 sm:space-y-6">
+                    <h3 class="text-2xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="p3_title">
                         Badilisha Betri ya Umeme Chini ya Dakika 2 Vituoni
                     </h3>
-                    <p class="text-slate-600 leading-relaxed" data-i18n="p3_desc">
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed" data-i18n="p3_desc">
                         Huna haja ya kusubiri chaji ya masaa 4. Ingia kwenye kituo chochote cha Puma, TotalEnergies au Oryx, ingiza betri iliyoisha na upokee betri yenye 100% kwa sekunde 120 tu.
                     </p>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200">
-                            <div class="text-2xl font-black text-brand-greenDark mb-1 tabular-nums" data-i18n="p3_stat1_num">60% Akiba</div>
-                            <div class="font-bold text-sm text-brand-obsidian" data-i18n="p3_stat1_title">Ulinganifu wa Mafuta</div>
-                            <div class="text-xs text-slate-500 mt-1" data-i18n="p3_stat1_desc">Kila swap inagharimu TZS 3,500 badala ya petroli ya TZS 12,000.</div>
+                    <div class="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
+                        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200">
+                            <div class="text-xl sm:text-2xl font-black text-brand-greenDark mb-1 tabular-nums" data-i18n="p3_stat1_num">60% Akiba</div>
+                            <div class="font-bold text-xs sm:text-sm text-brand-obsidian" data-i18n="p3_stat1_title">Ulinganifu wa Mafuta</div>
+                            <div class="text-[11px] sm:text-xs text-slate-500 mt-1 leading-normal" data-i18n="p3_stat1_desc">Kila swap TZS 3,500 badala ya petroli ya TZS 12,000.</div>
                         </div>
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200">
-                            <div class="text-2xl font-black text-brand-greenDark mb-1 tabular-nums" data-i18n="p3_stat2_num">120 Sec</div>
-                            <div class="font-bold text-sm text-brand-obsidian" data-i18n="p3_stat2_title">Kasi ya Kubadilisha</div>
-                            <div class="text-xs text-slate-500 mt-1" data-i18n="p3_stat2_desc">Chombo hakipotezi muda wa kufanya kazi barabarani.</div>
+                        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200">
+                            <div class="text-xl sm:text-2xl font-black text-brand-greenDark mb-1 tabular-nums" data-i18n="p3_stat2_num">120 Sec</div>
+                            <div class="font-bold text-xs sm:text-sm text-brand-obsidian" data-i18n="p3_stat2_title">Kasi ya Kubadilisha</div>
+                            <div class="text-[11px] sm:text-xs text-slate-500 mt-1 leading-normal" data-i18n="p3_stat2_desc">Chombo hakipotezi muda wa kufanya kazi barabarani.</div>
                         </div>
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200">
-                            <div class="text-2xl font-black text-brand-greenDark mb-1 tabular-nums" data-i18n="p3_stat3_num">20% Mgao</div>
-                            <div class="font-bold text-sm text-brand-obsidian" data-i18n="p3_stat3_title">Faida kwa Vituo</div>
-                            <div class="text-xs text-slate-500 mt-1" data-i18n="p3_stat3_desc">Vituo vya mafuta vinapata 20% ya mapato ya kila swap.</div>
+                        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200">
+                            <div class="text-xl sm:text-2xl font-black text-brand-greenDark mb-1 tabular-nums" data-i18n="p3_stat3_num">20% Mgao</div>
+                            <div class="font-bold text-xs sm:text-sm text-brand-obsidian" data-i18n="p3_stat3_title">Faida kwa Vituo</div>
+                            <div class="text-[11px] sm:text-xs text-slate-500 mt-1 leading-normal" data-i18n="p3_stat3_desc">Vituo vya mafuta vinapata 20% ya mapato ya kila swap.</div>
                         </div>
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200">
-                            <div class="text-2xl font-black text-brand-greenDark mb-1" data-i18n="p3_stat4_num">Zero Moshi</div>
-                            <div class="font-bold text-sm text-brand-obsidian" data-i18n="p3_stat4_title">Mazingira Safi</div>
-                            <div class="text-xs text-slate-500 mt-1" data-i18n="p3_stat4_desc">Kulinda afya ya madereva na vizazi vijavyo.</div>
+                        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200">
+                            <div class="text-xl sm:text-2xl font-black text-brand-greenDark mb-1" data-i18n="p3_stat4_num">Zero Moshi</div>
+                            <div class="font-bold text-xs sm:text-sm text-brand-obsidian" data-i18n="p3_stat4_title">Mazingira Safi</div>
+                            <div class="text-[11px] sm:text-xs text-slate-500 mt-1 leading-normal" data-i18n="p3_stat4_desc">Kulinda afya ya madereva na vizazi vijavyo.</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Real Clean Energy & Charging Photo -->
                 <div class="lg:col-span-6">
-                    <div class="rounded-3xl overflow-hidden border border-slate-200 shadow-xl relative bg-slate-900 group">
+                    <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-xl relative bg-slate-900 group">
                         <img src="/images/service_swap.jpg" 
                              alt="Kituo halisi cha kubadili betri za pikipiki za umeme (Battery Swap Cabinet)" 
-                             class="w-full h-[420px] object-cover group-hover:scale-105 transition duration-500">
+                             class="w-full h-64 sm:h-80 md:h-[420px] object-cover group-hover:scale-105 transition duration-500">
                     </div>
                 </div>
             </div>
@@ -1184,54 +1236,54 @@
     </section>
 
     <!-- Interactive ROI & Savings Calculator (Enterprise Tabular Figures) -->
-    <section id="akiba" class="py-20 bg-brand-obsidian text-white relative overflow-hidden">
+    <section id="akiba" class="py-14 sm:py-20 bg-brand-obsidian text-white relative overflow-hidden">
         <div class="absolute -top-32 -left-32 w-96 h-96 bg-brand-green/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="max-w-7xl mx-auto px-6 relative">
-            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-5xl font-black heading-tight" data-i18n="calc_heading">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-10 sm:mb-16">
+                <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black heading-tight" data-i18n="calc_heading">
                     Angalia Kiasi Unachookoa kwa Kujiunga na JOLT
                 </h2>
-                <p class="text-slate-400 text-base sm:text-lg" data-i18n="calc_subtitle">
+                <p class="text-slate-400 text-sm sm:text-base lg:text-lg leading-relaxed" data-i18n="calc_subtitle">
                     Linganisha gharama za mifumo mingine (yenye 18% kamisheni na petroli) dhidi ya JOLT (0% Kamisheni na nishati ya umeme).
                 </p>
             </div>
 
             <!-- Calculator Card -->
-            <div class="bg-brand-surface max-w-4xl mx-auto rounded-3xl p-8 sm:p-12 border border-brand-cardBorder shadow-2xl">
+            <div class="bg-brand-surface max-w-4xl mx-auto rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-12 border border-brand-cardBorder shadow-2xl">
                 
                 <!-- Slider Control -->
-                <div class="space-y-4 mb-10">
+                <div class="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
                     <div class="flex items-center justify-between">
-                        <label for="trips-slider" class="text-sm sm:text-base font-bold text-slate-300" data-i18n="calc_slider_label">
+                        <label for="trips-slider" class="text-xs sm:text-base font-bold text-slate-300" data-i18n="calc_slider_label">
                             Safari unazofanya kwa siku (Daily Trips):
                         </label>
-                        <span class="text-2xl sm:text-3xl font-black text-brand-green font-mono tabular-nums" id="trips-val">
+                        <span class="text-xl sm:text-3xl font-black text-brand-green font-mono tabular-nums" id="trips-val">
                             15 Safari
                         </span>
                     </div>
                     <input type="range" id="trips-slider" min="5" max="35" value="15" step="1" 
                            class="w-full h-3 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#0078D4]"
                            oninput="calculateSavings(this.value)">
-                    <div class="flex justify-between text-xs text-slate-500 font-mono">
+                    <div class="flex justify-between text-[10px] sm:text-xs text-slate-500 font-mono">
                         <span data-i18n="calc_5_trips">5 Safari</span>
-                        <span data-i18n="calc_avg_trips">15 Safari (Wastani)</span>
+                        <span data-i18n="calc_avg_trips">15 (Wastani)</span>
                         <span data-i18n="calc_25_trips">25 Safari</span>
-                        <span data-i18n="calc_35_trips">35+ Safari</span>
+                        <span data-i18n="calc_35_trips">35+</span>
                     </div>
                 </div>
 
                 <!-- Side by Side Comparison Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-800">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 pt-4 border-t border-slate-800">
                     
                     <!-- Old Systems / Traditional Model -->
-                    <div class="bg-slate-900/90 p-6 rounded-2xl border border-red-900/30 space-y-4">
+                    <div class="bg-slate-900/90 p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-red-900/30 space-y-3 sm:space-y-4">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-bold uppercase text-red-400 tracking-wider" data-i18n="calc_old_title">Mifumo Mingine / Petroli</span>
-                            <span class="text-xs px-2.5 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/40 font-bold" data-i18n="calc_old_badge">Makato Mengi</span>
+                            <span class="text-[10px] sm:text-xs px-2.5 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/40 font-bold" data-i18n="calc_old_badge">Makato Mengi</span>
                         </div>
                         
-                        <div class="space-y-2 text-sm text-slate-400">
+                        <div class="space-y-2 text-xs sm:text-sm text-slate-400">
                             <div class="flex justify-between">
                                 <span data-i18n="calc_old_comm_label">Kamisheni ya Kampuni (18%):</span>
                                 <span class="font-mono text-red-400 font-bold tabular-nums" id="old-commission">TZS 162,000</span>
@@ -1246,22 +1298,22 @@
                             </div>
                         </div>
 
-                        <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+                        <div class="pt-3 sm:pt-4 border-t border-slate-800 flex items-center justify-between">
                             <span class="text-xs font-bold uppercase text-slate-400" data-i18n="calc_total_cost_label">Jumla ya Gharama:</span>
-                            <span class="text-xl font-black text-red-400 font-mono tabular-nums" id="old-total">TZS 642,000</span>
+                            <span class="text-lg sm:text-xl font-black text-red-400 font-mono tabular-nums" id="old-total">TZS 642,000</span>
                         </div>
                     </div>
 
                     <!-- JOLT Model (0% Commission + EV) -->
-                    <div class="bg-blue-950/30 p-6 rounded-2xl border border-brand-green/40 space-y-4 relative overflow-hidden">
+                    <div class="bg-blue-950/30 p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-brand-green/40 space-y-3 sm:space-y-4 relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-brand-green/10 rounded-full blur-xl pointer-events-none"></div>
 
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-bold uppercase text-brand-green tracking-wider" data-i18n="calc_jolt_title">JOLT (0% Kamisheni + Umeme)</span>
-                            <span class="text-xs px-2.5 py-0.5 rounded bg-brand-green/20 text-brand-green border border-brand-green/40 font-bold" data-i18n="calc_jolt_badge">100% Yako</span>
+                            <span class="text-[10px] sm:text-xs px-2.5 py-0.5 rounded bg-brand-green/20 text-brand-green border border-brand-green/40 font-bold" data-i18n="calc_jolt_badge">100% Yako</span>
                         </div>
                         
-                        <div class="space-y-2 text-sm text-slate-300">
+                        <div class="space-y-2 text-xs sm:text-sm text-slate-300">
                             <div class="flex justify-between">
                                 <span data-i18n="calc_jolt_comm_label">Kamisheni ya JOLT (0%):</span>
                                 <span class="font-mono text-brand-green font-bold" data-i18n="calc_free">TZS 0 (BURE)</span>
@@ -1276,25 +1328,25 @@
                             </div>
                         </div>
 
-                        <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+                        <div class="pt-3 sm:pt-4 border-t border-slate-800 flex items-center justify-between">
                             <span class="text-xs font-bold uppercase text-slate-400" data-i18n="calc_total_cost_label">Jumla ya Gharama:</span>
-                            <span class="text-xl font-black text-brand-green font-mono tabular-nums" id="jolt-total">TZS 115,000</span>
+                            <span class="text-lg sm:text-xl font-black text-brand-green font-mono tabular-nums" id="jolt-total">TZS 115,000</span>
                         </div>
                     </div>
 
                 </div>
 
                 <!-- Net Monthly Savings Banner -->
-                <div class="mt-8 p-6 rounded-2xl bg-gradient-to-r from-blue-950/70 to-slate-900 border border-brand-green/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="mt-6 sm:mt-8 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-950/70 to-slate-900 border border-brand-green/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                     <div>
-                        <div class="text-xs uppercase font-extrabold tracking-wider text-slate-300" data-i18n="calc_net_savings_label">
+                        <div class="text-[11px] sm:text-xs uppercase font-extrabold tracking-wider text-slate-300" data-i18n="calc_net_savings_label">
                             AKIBA UNAYOBAKI NAYO MFUKONI KILA MWEZI:
                         </div>
-                        <div class="text-3xl sm:text-4xl font-black text-brand-green font-mono tracking-tight mt-1 tabular-nums" id="savings-net">
+                        <div class="text-2xl sm:text-4xl font-black text-brand-green font-mono tracking-tight mt-1 tabular-nums" id="savings-net">
                             + TZS 527,000 / mwezi
                         </div>
                     </div>
-                    <a href="#pakua" class="btn-pill-green inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-extrabold shrink-0">
+                    <a href="http://127.0.0.1:8000/downloads/driver" class="btn-pill-green inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-xs sm:text-sm font-extrabold shrink-0 w-full sm:w-auto text-center">
                         <i data-lucide="check" class="w-4 h-4"></i>
                         <span data-i18n="calc_cta">Anza Kuokoa Sasa</span>
                     </a>
@@ -1305,53 +1357,53 @@
     </section>
 
     <!-- Bento Grid (Security & Hardware) -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6 space-y-12">
+    <section class="py-14 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
             
-            <div class="text-center max-w-3xl mx-auto space-y-4">
-                <h2 class="text-3xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="bento_heading">
+            <div class="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
+                <h2 class="text-2xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="bento_heading">
                     Miundombinu Imara ya Kidijitali ya Usafiri
                 </h2>
-                <p class="text-slate-600" data-i18n="bento_subtitle">
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed" data-i18n="bento_subtitle">
                     Teknolojia iliyoundwa mahususi kutatua changamoto halisi za barabara, vituo vya mafuta na vijiwe vya Tanzania.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
                 <!-- Bento 1: Geofencing & Vijiwe Rasmi -->
-                <div class="bg-brand-slateBg p-8 rounded-3xl border border-slate-200 space-y-4 hover:shadow-lg transition">
-                    <div class="w-14 h-14 rounded-2xl bg-blue-50 text-[#0078D4] border border-blue-100 flex items-center justify-center shadow-sm">
-                        <svg class="w-7 h-7 text-[#0078D4]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="bg-brand-slateBg p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 space-y-3.5 sm:space-y-4 hover:shadow-lg transition">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-50 text-[#0078D4] border border-blue-100 flex items-center justify-center shadow-xs">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#0078D4]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
                             <circle cx="12" cy="10" r="3"></circle>
                             <circle cx="12" cy="10" r="7" stroke-dasharray="3 3" stroke-width="1.2" opacity="0.6"></circle>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-black text-brand-obsidian" data-i18n="bento_1_title">Geofencing & Vijiwe Rasmi</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed" data-i18n="bento_1_desc">
+                    <h3 class="text-lg sm:text-xl font-black text-brand-obsidian" data-i18n="bento_1_title">Geofencing & Vijiwe Rasmi</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-i18n="bento_1_desc">
                         Mipaka ya kidijitali inatambua vijiwe vyote vya boda mjini Dar es Salaam na mikoani. Hakuna dereva anayelazimishwa kulipa ushuru haramu au kurukia foleni.
                     </p>
                 </div>
 
                 <!-- Bento 2: Kitufe cha Dharura (SOS Button) -->
-                <div class="bg-brand-slateBg p-8 rounded-3xl border border-slate-200 space-y-4 hover:shadow-lg transition">
-                    <div class="w-14 h-14 rounded-2xl bg-red-50 text-red-600 border border-red-100 flex items-center justify-center shadow-sm">
-                        <svg class="w-7 h-7 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="bg-brand-slateBg p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 space-y-3.5 sm:space-y-4 hover:shadow-lg transition">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-red-50 text-red-600 border border-red-100 flex items-center justify-center shadow-xs">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                             <line x1="12" y1="8" x2="12" y2="12"></line>
                             <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="3"></line>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-black text-brand-obsidian" data-i18n="bento_2_title">Kitufe cha Dharura (SOS Button)</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed" data-i18n="bento_2_desc">
+                    <h3 class="text-lg sm:text-xl font-black text-brand-obsidian" data-i18n="bento_2_title">Kitufe cha Dharura (SOS Button)</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-i18n="bento_2_desc">
                         Abiria au dereva anapohisi hatari, anabonyeza kitufe cha SOS. Taarifa na mahali alipo (GPS) vinatumwa papo hapo kwa timu ya dharura na kituo cha polisi.
                     </p>
                 </div>
 
                 <!-- Bento 3: Digital KYC & Uhakiki wa Leseni -->
-                <div class="bg-brand-slateBg p-8 rounded-3xl border border-slate-200 space-y-4 hover:shadow-lg transition">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shadow-sm">
-                        <svg class="w-7 h-7 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="bg-brand-slateBg p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 space-y-3.5 sm:space-y-4 hover:shadow-lg transition">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shadow-xs">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="4" width="18" height="16" rx="3"></rect>
                             <circle cx="9" cy="10" r="2.5"></circle>
                             <path d="M15 8h2"></path>
@@ -1360,8 +1412,8 @@
                             <path d="M14.5 15.5l2 2 3.5-3.5" stroke-width="2.5"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-black text-brand-obsidian" data-i18n="bento_3_title">Digital KYC & Uhakiki wa Leseni</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed" data-i18n="bento_3_desc">
+                    <h3 class="text-lg sm:text-xl font-black text-brand-obsidian" data-i18n="bento_3_title">Digital KYC & Uhakiki wa Leseni</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-i18n="bento_3_desc">
                         Ukaguzi wa leseni ya udereva (Class A/B), bima na namba za chombo kwa ushirikiano na kanzidata ya LATRA. Safari zote ni salama 100%.
                     </p>
                 </div>
@@ -1371,18 +1423,18 @@
     </section>
 
     <!-- Testimonials Section with Real Portraits -->
-    <section class="py-20 bg-slate-50 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-6 space-y-12">
+    <section class="py-14 sm:py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
             
             <div class="text-center max-w-2xl mx-auto space-y-3">
-                <h2 class="text-3xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="test_heading">
+                <h2 class="text-2xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="test_heading">
                     Inayoaminika na Maelfu ya Madereva na Abiria
                 </h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
                 <!-- Testimonial 1 -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs space-y-3 sm:space-y-4">
                     <div class="flex items-center gap-1 text-brand-green">
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
@@ -1390,7 +1442,7 @@
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                     </div>
-                    <p class="text-sm text-slate-700 italic leading-relaxed" data-i18n="test_1_quote">
+                    <p class="text-xs sm:text-sm text-slate-700 italic leading-relaxed" data-i18n="test_1_quote">
                         "Nilikuwa nakatwa 20% kila safari kwenye mifumo mingine. Tangu nianze kutumia JOLT, pesa yote ni yangu. Nina uwezo wa kulipa ada ya shule ya watoto bila wasiwasi."
                     </p>
                     <div class="pt-2 border-t border-slate-100 flex items-center gap-3">
@@ -1405,7 +1457,7 @@
                 </div>
 
                 <!-- Testimonial 2 -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs space-y-3 sm:space-y-4">
                     <div class="flex items-center gap-1 text-brand-green">
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
@@ -1413,7 +1465,7 @@
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                     </div>
-                    <p class="text-sm text-slate-700 italic leading-relaxed" data-i18n="test_2_quote">
+                    <p class="text-xs sm:text-sm text-slate-700 italic leading-relaxed" data-i18n="test_2_quote">
                         "Kipengele cha PIN kimeniondolea hofu kabisa. Najua siwezi kupanda chombo kingine kwa makosa na ninaweza kutuma safari yangu kwa wazazi wangu wakiniona moja kwa moja."
                     </p>
                     <div class="pt-2 border-t border-slate-100 flex items-center gap-3">
@@ -1428,7 +1480,7 @@
                 </div>
 
                 <!-- Testimonial 3 -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs space-y-3 sm:space-y-4">
                     <div class="flex items-center gap-1 text-brand-green">
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
@@ -1436,7 +1488,7 @@
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                     </div>
-                    <p class="text-sm text-slate-700 italic leading-relaxed" data-i18n="test_3_quote">
+                    <p class="text-xs sm:text-sm text-slate-700 italic leading-relaxed" data-i18n="test_3_quote">
                         "Kama kiongozi wa kijiwe, JOLT imetuletea heshima. Madereva hawapigani tena foleni, na mfumo wa kubadilisha betri za EV kituo cha Puma umepunguza gharama zetu kwa zaidi ya nusu."
                     </p>
                     <div class="pt-2 border-t border-slate-100 flex items-center gap-3">
@@ -1452,60 +1504,58 @@
             </div>
 
         </div>
-    </section>
-
     <!-- FAQ Section -->
-    <section id="faq" class="py-20 bg-white">
-        <div class="max-w-4xl mx-auto px-6 space-y-8">
+    <section id="faq" class="py-14 sm:py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 space-y-6 sm:space-y-8">
             
-            <div class="text-center space-y-3">
-                <h2 class="text-3xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="faq_heading">
+            <div class="text-center space-y-2.5 sm:space-y-3">
+                <h2 class="text-2xl sm:text-4xl font-black text-brand-obsidian heading-tight" data-i18n="faq_heading">
                     Una Swali? Tunayo Majibu.
                 </h2>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-3.5 sm:space-y-4">
                 
                 <!-- Q1 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden">
-                    <button onclick="toggleFaq(1)" class="w-full p-5 text-left font-bold text-brand-obsidian bg-brand-slateBg flex items-center justify-between">
+                <div class="border border-slate-200 rounded-xl sm:rounded-2xl overflow-hidden">
+                    <button onclick="toggleFaq(1)" class="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-base text-brand-obsidian bg-brand-slateBg flex items-center justify-between gap-3">
                         <span data-i18n="faq_q1">Je, ni kweli JOLT haichukui kamisheni kwa madereva?</span>
-                        <i data-lucide="chevron-down" id="faq-icon-1" class="w-5 h-5 text-slate-500 transition-transform"></i>
+                        <i data-lucide="chevron-down" id="faq-icon-1" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 transition-transform shrink-0"></i>
                     </button>
-                    <div id="faq-ans-1" class="hidden p-5 text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a1">
+                    <div id="faq-ans-1" class="hidden p-4 sm:p-5 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a1">
                         Ndio, ni kweli 100%! JOLT inafanya kazi kwa mfumo wa 0% Kamisheni. Dereva anapokea 100% ya nauli ya kila safari. JOLT inapata mapato kupitia ushirikiano na vituo vya nishati (Swap Cabinets 20% margin) na matangazo ya bidhaa za usafiri, si kwa kumkata dereva jasho lake.
                     </div>
                 </div>
 
                 <!-- Q2 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden">
-                    <button onclick="toggleFaq(2)" class="w-full p-5 text-left font-bold text-brand-obsidian bg-brand-slateBg flex items-center justify-between">
+                <div class="border border-slate-200 rounded-xl sm:rounded-2xl overflow-hidden">
+                    <button onclick="toggleFaq(2)" class="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-base text-brand-obsidian bg-brand-slateBg flex items-center justify-between gap-3">
                         <span data-i18n="faq_q2">Mfumo wa PIN unamlindaje abiria na dereva?</span>
-                        <i data-lucide="chevron-down" id="faq-icon-2" class="w-5 h-5 text-slate-500 transition-transform"></i>
+                        <i data-lucide="chevron-down" id="faq-icon-2" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 transition-transform shrink-0"></i>
                     </button>
-                    <div id="faq-ans-2" class="hidden p-5 text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a2">
+                    <div id="faq-ans-2" class="hidden p-4 sm:p-5 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a2">
                         Kila safari inapoagizwa, abiria hupewa nambari ya siri ya tarakimu 4 (PIN). Chombo kinapofika, abiria anampa dereva nambari hiyo. Dereva akiingiza PIN kwenye simu yake na ikithibitishwa, ndipo safari inapoanza rasmi. Hii inazuia mtu kupanda chombo kingine au safari kuanza bila ridhaa yako.
                     </div>
                 </div>
 
                 <!-- Q3 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden">
-                    <button onclick="toggleFaq(3)" class="w-full p-5 text-left font-bold text-brand-obsidian bg-brand-slateBg flex items-center justify-between">
+                <div class="border border-slate-200 rounded-xl sm:rounded-2xl overflow-hidden">
+                    <button onclick="toggleFaq(3)" class="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-base text-brand-obsidian bg-brand-slateBg flex items-center justify-between gap-3">
                         <span data-i18n="faq_q3">Je, huduma ya kubadilisha betri (EV Swap) inafanyaje kazi?</span>
-                        <i data-lucide="chevron-down" id="faq-icon-3" class="w-5 h-5 text-slate-500 transition-transform"></i>
+                        <i data-lucide="chevron-down" id="faq-icon-3" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 transition-transform shrink-0"></i>
                     </button>
-                    <div id="faq-ans-3" class="hidden p-5 text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a3">
+                    <div id="faq-ans-3" class="hidden p-4 sm:p-5 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a3">
                         Badala ya kuchomeka pikipiki kwenye umeme kwa saa 4, dereva wa JOLT anaenda kwenye kituo chochote kikuu cha mafuta (kama Puma, TotalEnergies, au Oryx) chenye makabati ya JOLT. Anaweka betri yake iliyoisha, na kabati inatoa betri yenye chaji 100% kwa chini ya dakika 2.
                     </div>
                 </div>
 
                 <!-- Q4 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden">
-                    <button onclick="toggleFaq(4)" class="w-full p-5 text-left font-bold text-brand-obsidian bg-brand-slateBg flex items-center justify-between">
+                <div class="border border-slate-200 rounded-xl sm:rounded-2xl overflow-hidden">
+                    <button onclick="toggleFaq(4)" class="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-base text-brand-obsidian bg-brand-slateBg flex items-center justify-between gap-3">
                         <span data-i18n="faq_q4">Dereva anahitaji nini kuanza kazi na JOLT?</span>
-                        <i data-lucide="chevron-down" id="faq-icon-4" class="w-5 h-5 text-slate-500 transition-transform"></i>
+                        <i data-lucide="chevron-down" id="faq-icon-4" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 transition-transform shrink-0"></i>
                     </button>
-                    <div id="faq-ans-4" class="hidden p-5 text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a4">
+                    <div id="faq-ans-4" class="hidden p-4 sm:p-5 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a4">
                         1. Simu ya Android inayotumia intaneti.<br>
                         2. Leseni halali ya udereva (Class A kwa Boda, Class B/D kwa Bajaji).<br>
                         3. Kadi ya chombo cha moto (Registration card) na bima hai.<br>
@@ -1515,12 +1565,12 @@
                 </div>
 
                 <!-- Q5 -->
-                <div class="border border-slate-200 rounded-2xl overflow-hidden">
-                    <button onclick="toggleFaq(5)" class="w-full p-5 text-left font-bold text-brand-obsidian bg-brand-slateBg flex items-center justify-between">
+                <div class="border border-slate-200 rounded-xl sm:rounded-2xl overflow-hidden">
+                    <button onclick="toggleFaq(5)" class="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-base text-brand-obsidian bg-brand-slateBg flex items-center justify-between gap-3">
                         <span data-i18n="faq_q5">Ninalipaje nauli nikitumia JOLT?</span>
-                        <i data-lucide="chevron-down" id="faq-icon-5" class="w-5 h-5 text-slate-500 transition-transform"></i>
+                        <i data-lucide="chevron-down" id="faq-icon-5" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 transition-transform shrink-0"></i>
                     </button>
-                    <div id="faq-ans-5" class="hidden p-5 text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a5">
+                    <div id="faq-ans-5" class="hidden p-4 sm:p-5 text-xs sm:text-sm text-slate-600 bg-white border-t border-slate-200 leading-relaxed" data-i18n="faq_a5">
                         Unaweza kulipa kwa pesa taslimu (Cash) moja kwa moja kwa dereva mwisho wa safari, au kwa kutumia pochi ya mtandao (Vodacom M-Pesa, Tigo Pesa, Airtel Money au Halopesa) moja kwa moja kupitia App.
                     </div>
                 </div>
@@ -1531,102 +1581,102 @@
     </section>
 
     <!-- Bottom App Download CTA (Bolt Style - Download Our Apps with Tilted Phone in JOLT Electric Blue) -->
-    <section id="pakua" class="pt-20 pb-0 bg-black text-white relative overflow-hidden border-t border-slate-900">
+    <section id="pakua" class="pt-14 sm:pt-20 pb-0 bg-black text-white relative overflow-hidden border-t border-slate-900">
         <!-- Subtle Ambient Lighting -->
-        <div class="absolute top-1/2 left-1/4 -translate-y-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#0078D4]/15 rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/4 -translate-y-1/2 -translate-x-1/2 w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] bg-[#0078D4]/15 rounded-full blur-[140px] pointer-events-none"></div>
 
-        <div class="max-w-7xl mx-auto px-6 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             
             <!-- Section Header (Bolt Picture 5 Style: Download our apps / Available for iOS and Android devices) -->
-            <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16 space-y-3">
-                <h2 class="text-4xl sm:text-6xl font-black tracking-tight text-white heading-tight" data-i18n="cta_bolt_title">
+            <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-16 space-y-2.5 sm:space-y-3">
+                <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white heading-tight" data-i18n="cta_bolt_title">
                     Download our apps
                 </h2>
-                <p class="text-slate-400 text-base sm:text-lg font-medium" data-i18n="cta_bolt_sub">
+                <p class="text-slate-400 text-sm sm:text-base lg:text-lg font-medium" data-i18n="cta_bolt_sub">
                     Available for iOS and Android devices.
                 </p>
             </div>
 
             <!-- Two-Column Showcase Layout -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-end max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-end max-w-6xl mx-auto">
                 
                 <!-- Left Column: Tilted Phone Rising from Bottom-Left (Bolt Style - Moved Forward and Fully Visible) -->
-                <div class="lg:col-span-6 relative flex items-end justify-center pt-6 min-h-[440px] sm:min-h-[500px] lg:min-h-[540px]">
+                <div class="lg:col-span-6 relative flex items-end justify-center pt-4 sm:pt-6 min-h-[380px] xs:min-h-[420px] sm:min-h-[500px] lg:min-h-[540px]">
                     
                     <!-- Tilted / Slanted Smartphone Container (Centered & shifted forward to eliminate clipping) -->
-                    <div class="relative w-[310px] sm:w-[360px] lg:w-[385px] mx-auto -mb-4 sm:-mb-7 lg:-mb-9 transform -rotate-[4deg] sm:-rotate-[5deg] hover:-rotate-[3deg] transition-transform duration-500 origin-bottom">
+                    <div class="relative w-[270px] xs:w-[295px] sm:w-[350px] lg:w-[385px] mx-auto -mb-4 sm:-mb-7 lg:-mb-9 transform -rotate-[2deg] sm:-rotate-[4deg] hover:-rotate-[1deg] transition-transform duration-500 origin-bottom">
                         
                         <!-- Vibrant Electric Blue Ambient Rim Glow -->
-                        <div class="absolute -inset-3 bg-[#0078D4]/30 rounded-[56px] blur-2xl pointer-events-none"></div>
+                        <div class="absolute -inset-3 bg-[#0078D4]/30 rounded-[48px] sm:rounded-[56px] blur-2xl pointer-events-none"></div>
 
                         <!-- Physical Phone Chassis with Thick JOLT Electric Blue Bumper Frame -->
-                        <div class="relative bg-black rounded-[50px] sm:rounded-[54px] border-[10px] sm:border-[12px] border-[#0078D4] p-5 sm:p-6 shadow-[0_30px_90px_rgba(0,120,212,0.4)]">
+                        <div class="relative bg-black rounded-[42px] xs:rounded-[48px] sm:rounded-[54px] border-[8px] sm:border-[12px] border-[#0078D4] p-3.5 xs:p-4 sm:p-6 shadow-[0_20px_70px_rgba(0,120,212,0.4)]">
                             
                             <!-- Dynamic Island / Top Camera Speaker Pill -->
-                            <div class="flex justify-center mb-6">
-                                <div class="w-24 sm:w-28 h-4 bg-slate-900 rounded-full flex items-center justify-center gap-2 border border-slate-800">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-slate-800"></div>
-                                    <div class="w-3 h-3 rounded-full bg-slate-700"></div>
+                            <div class="flex justify-center mb-4 sm:mb-6">
+                                <div class="w-20 sm:w-28 h-3.5 sm:h-4 bg-slate-900 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 border border-slate-800">
+                                    <div class="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-slate-800"></div>
+                                    <div class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-slate-700"></div>
                                 </div>
                             </div>
 
                             <!-- Screen: Squircle App Icon Grid (Bolt Picture 5 Style) -->
-                            <div class="grid grid-cols-3 gap-3.5 sm:gap-4 pb-12 sm:pb-16 pt-1">
+                            <div class="grid grid-cols-3 gap-2.5 xs:gap-3 sm:gap-4 pb-8 sm:pb-16 pt-1">
                                 
                                 <!-- App 1: Jolt -->
-                                <div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="switchDownloadTab('rides')">
-                                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
-                                        <span class="font-black text-sm sm:text-base tracking-tight leading-none">Jolt</span>
-                                        <svg class="w-5 h-5 text-white mt-0.5" viewBox="0 0 24 24" fill="currentColor">
+                                <div class="flex flex-col items-center gap-1.5 sm:gap-2 group cursor-pointer" onclick="switchDownloadTab('rides')">
+                                    <div class="w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-xl xs:rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
+                                        <span class="font-black text-xs sm:text-base tracking-tight leading-none">Jolt</span>
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white mt-0.5" viewBox="0 0 24 24" fill="currentColor">
                                             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                                         </svg>
                                     </div>
-                                    <span class="text-xs sm:text-sm font-bold text-slate-300">Jolt</span>
+                                    <span class="text-[11px] sm:text-sm font-bold text-slate-300">Jolt</span>
                                 </div>
 
                                 <!-- App 2: Jolt Delivery -->
-                                <div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="switchDownloadTab('delivery')">
-                                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
-                                        <span class="font-black text-xs sm:text-sm tracking-tight leading-none">Jolt</span>
-                                        <span class="text-[9px] sm:text-[11px] font-black uppercase text-blue-100">Food</span>
+                                <div class="flex flex-col items-center gap-1.5 sm:gap-2 group cursor-pointer" onclick="switchDownloadTab('delivery')">
+                                    <div class="w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-xl xs:rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
+                                        <span class="font-black text-[11px] sm:text-sm tracking-tight leading-none">Jolt</span>
+                                        <span class="text-[8px] sm:text-[11px] font-black uppercase text-blue-100">Food</span>
                                     </div>
-                                    <span class="text-xs sm:text-sm font-bold text-slate-300">Jolt Food</span>
+                                    <span class="text-[11px] sm:text-sm font-bold text-slate-300">Jolt Food</span>
                                 </div>
 
                                 <!-- App 3: Courier -->
-                                <div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="switchDownloadTab('delivery')">
-                                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
-                                        <i data-lucide="bike" class="w-6 h-6 sm:w-7 sm:h-7 text-white"></i>
-                                        <span class="text-[8px] sm:text-[10px] font-black tracking-tight leading-none mt-1">Jolt</span>
+                                <div class="flex flex-col items-center gap-1.5 sm:gap-2 group cursor-pointer" onclick="switchDownloadTab('delivery')">
+                                    <div class="w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-xl xs:rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
+                                        <i data-lucide="bike" class="w-5 h-5 sm:w-7 sm:h-7 text-white"></i>
+                                        <span class="text-[7px] sm:text-[10px] font-black tracking-tight leading-none mt-0.5">Jolt</span>
                                     </div>
-                                    <span class="text-xs sm:text-sm font-bold text-slate-300">Courier</span>
+                                    <span class="text-[11px] sm:text-sm font-bold text-slate-300">Courier</span>
                                 </div>
 
                                 <!-- App 4: Dereva (Driver) -->
-                                <div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="switchDownloadTab('driver')">
-                                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
-                                        <i data-lucide="steering-wheel" class="w-6 h-6 sm:w-7 sm:h-7 text-white"></i>
-                                        <span class="text-[9px] font-black uppercase tracking-wider mt-1">0%</span>
+                                <div class="flex flex-col items-center gap-1.5 sm:gap-2 group cursor-pointer" onclick="switchDownloadTab('driver')">
+                                    <div class="w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-xl xs:rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
+                                        <i data-lucide="steering-wheel" class="w-5 h-5 sm:w-7 sm:h-7 text-white"></i>
+                                        <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-wider mt-0.5">0%</span>
                                     </div>
-                                    <span class="text-xs sm:text-sm font-bold text-slate-300">Driver</span>
+                                    <span class="text-[11px] sm:text-sm font-bold text-slate-300">Driver</span>
                                 </div>
 
                                 <!-- App 5: Store / Fleet -->
-                                <div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="switchDownloadTab('rides')">
-                                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
-                                        <i data-lucide="store" class="w-6 h-6 sm:w-7 sm:h-7 text-white"></i>
-                                        <span class="text-[8px] sm:text-[10px] font-black tracking-tight mt-1">Jolt</span>
+                                <div class="flex flex-col items-center gap-1.5 sm:gap-2 group cursor-pointer" onclick="switchDownloadTab('rides')">
+                                    <div class="w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-xl xs:rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
+                                        <i data-lucide="store" class="w-5 h-5 sm:w-7 sm:h-7 text-white"></i>
+                                        <span class="text-[7px] sm:text-[10px] font-black tracking-tight mt-0.5">Jolt</span>
                                     </div>
-                                    <span class="text-xs sm:text-sm font-bold text-slate-300">Store</span>
+                                    <span class="text-[11px] sm:text-sm font-bold text-slate-300">Store</span>
                                 </div>
 
                                 <!-- App 6: Swap EV -->
-                                <div class="flex flex-col items-center gap-2 group cursor-pointer" onclick="switchDownloadTab('rides')">
-                                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
-                                        <i data-lucide="zap" class="w-6 h-6 sm:w-7 sm:h-7 text-white"></i>
-                                        <span class="text-[8px] sm:text-[10px] font-black tracking-tight mt-1">Swap</span>
+                                <div class="flex flex-col items-center gap-1.5 sm:gap-2 group cursor-pointer" onclick="switchDownloadTab('rides')">
+                                    <div class="w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-xl xs:rounded-2xl sm:rounded-[22px] bg-[#0078D4] flex flex-col items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition duration-200">
+                                        <i data-lucide="zap" class="w-5 h-5 sm:w-7 sm:h-7 text-white"></i>
+                                        <span class="text-[7px] sm:text-[10px] font-black tracking-tight mt-0.5">Swap</span>
                                     </div>
-                                    <span class="text-xs sm:text-sm font-bold text-slate-300">Swap EV</span>
+                                    <span class="text-[11px] sm:text-sm font-bold text-slate-300">Swap EV</span>
                                 </div>
 
                             </div>
@@ -1636,37 +1686,37 @@
                 </div>
 
                 <!-- Right Column: Interactive Tabs & Content (Bolt Picture 5 Style) -->
-                <div class="lg:col-span-6 space-y-8 flex flex-col justify-center pb-16 lg:pb-24">
+                <div class="lg:col-span-6 space-y-6 sm:space-y-8 flex flex-col justify-center pb-12 sm:pb-16 lg:pb-24">
                     
                     <!-- Tabs Header (Rides | Delivery | Driver) -->
-                    <div class="flex items-center gap-8 border-b border-slate-800 pb-3">
-                        <button onclick="switchDownloadTab('rides')" id="dtab-rides" class="relative pb-3 text-base sm:text-lg font-bold text-white transition">
+                    <div class="flex items-center gap-6 sm:gap-8 border-b border-slate-800 pb-3 overflow-x-auto no-scrollbar">
+                        <button onclick="switchDownloadTab('rides')" id="dtab-rides" class="relative pb-3 text-sm sm:text-lg font-bold text-white transition shrink-0">
                             <span data-i18n="cta_tab_rides">Rides</span>
                             <span id="dindicator-rides" class="absolute bottom-[-13px] left-0 right-0 h-0.5 bg-[#0078D4]"></span>
                         </button>
-                        <button onclick="switchDownloadTab('delivery')" id="dtab-delivery" class="relative pb-3 text-base sm:text-lg font-medium text-slate-400 hover:text-white transition">
+                        <button onclick="switchDownloadTab('delivery')" id="dtab-delivery" class="relative pb-3 text-sm sm:text-lg font-medium text-slate-400 hover:text-white transition shrink-0">
                             <span data-i18n="cta_tab_delivery">Delivery</span>
                             <span id="dindicator-delivery" class="hidden absolute bottom-[-13px] left-0 right-0 h-0.5 bg-[#0078D4]"></span>
                         </button>
-                        <button onclick="switchDownloadTab('driver')" id="dtab-driver" class="relative pb-3 text-base sm:text-lg font-medium text-slate-400 hover:text-white transition">
+                        <button onclick="switchDownloadTab('driver')" id="dtab-driver" class="relative pb-3 text-sm sm:text-lg font-medium text-slate-400 hover:text-white transition shrink-0">
                             <span data-i18n="cta_tab_driver">Driver (0%)</span>
                             <span id="dindicator-driver" class="hidden absolute bottom-[-13px] left-0 right-0 h-0.5 bg-[#0078D4]"></span>
                         </button>
                     </div>
 
                     <!-- Dynamic Content Area -->
-                    <div class="space-y-4">
-                        <h3 id="dtab-heading" class="text-3xl sm:text-5xl font-black text-white heading-tight tracking-tight leading-tight">
+                    <div class="space-y-3 sm:space-y-4">
+                        <h3 id="dtab-heading" class="text-2xl sm:text-4xl lg:text-5xl font-black text-white heading-tight tracking-tight leading-tight">
                             The fast, affordable way to ride.
                         </h3>
-                        <p id="dtab-desc" class="text-slate-400 text-base sm:text-lg leading-relaxed">
+                        <p id="dtab-desc" class="text-slate-400 text-sm sm:text-base lg:text-lg leading-relaxed">
                             Available for iOS and Android devices.
                         </p>
                     </div>
 
                     <!-- Get Jolt Pill Button (matching Bolt Picture 5 in JOLT Electric Blue #0078D4) -->
-                    <div class="pt-2">
-                        <button id="dtab-cta-btn" onclick="handleDownloadTabAction()" class="bg-[#0078D4] hover:bg-[#0068ba] text-white font-black text-base sm:text-lg px-10 py-4 rounded-full shadow-lg shadow-blue-600/35 transition transform hover:-translate-y-0.5 inline-flex items-center gap-2.5">
+                    <div class="pt-1 sm:pt-2">
+                        <button id="dtab-cta-btn" onclick="handleDownloadTabAction()" class="bg-[#0078D4] hover:bg-[#0068ba] text-white font-black text-sm sm:text-lg px-8 sm:px-10 py-3.5 sm:py-4 rounded-full shadow-lg shadow-blue-600/35 transition transform hover:-translate-y-0.5 inline-flex items-center justify-center gap-2.5 w-full sm:w-auto">
                             <span id="dtab-cta-text">Get Jolt</span>
                         </button>
                     </div>
@@ -1679,17 +1729,17 @@
     </section>
 
     <!-- News and Updates Section (Bolt Style in JOLT Electric Blue Theme) -->
-    <section id="habari" class="py-20 lg:py-24 bg-[#F8FAFC] border-t border-slate-200/90 text-slate-900">
-        <div class="max-w-7xl mx-auto px-6">
+    <section id="habari" class="py-14 sm:py-20 lg:py-24 bg-[#F8FAFC] border-t border-slate-200/90 text-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- Section Header -->
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
                 <div>
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight heading-tight" data-i18n="news_heading">
+                    <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight heading-tight" data-i18n="news_heading">
                         News and updates
                     </h2>
-                    <div class="mt-4">
-                        <a href="#habari" class="bg-[#0078D4] hover:bg-[#0068ba] text-white font-extrabold text-sm px-6 py-3 rounded-2xl shadow-sm hover:shadow-md transition inline-flex items-center gap-2">
+                    <div class="mt-3 sm:mt-4">
+                        <a href="#habari" class="bg-[#0078D4] hover:bg-[#0068ba] text-white font-extrabold text-xs sm:text-sm px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl shadow-xs hover:shadow-md transition inline-flex items-center gap-2">
                             <span data-i18n="news_btn_all">View all</span>
                             <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
                         </a>
@@ -1698,19 +1748,19 @@
             </div>
 
             <!-- Two-Column Layout (Featured Big Article on Left, 3 Stacked Articles on Right) -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
                 
                 <!-- Left: Big Featured Story (matching Bolt Screenshot 2) -->
-                <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col md:flex-row group">
+                <div class="lg:col-span-7 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col md:flex-row group">
                     <!-- Image -->
-                    <div class="md:w-1/2 h-64 md:h-auto overflow-hidden relative bg-slate-100 shrink-0">
+                    <div class="md:w-1/2 h-52 sm:h-64 md:h-auto overflow-hidden relative bg-slate-100 shrink-0">
                         <img src="/images/jolt_happy_rider.jpg" 
                              alt="Abiria wa JOLT" 
                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     </div>
                     
                     <!-- Content -->
-                    <div class="md:w-1/2 p-7 sm:p-8 flex flex-col justify-between space-y-4">
+                    <div class="md:w-1/2 p-5 sm:p-7 md:p-8 flex flex-col justify-between space-y-4">
                         <div class="space-y-3">
                             <div class="flex items-center justify-between text-xs">
                                 <span class="px-3 py-1 rounded-full border border-blue-200 bg-blue-50/70 text-[#0078D4] font-bold" data-i18n="news_feat_tag">
@@ -1719,7 +1769,7 @@
                                 <span class="text-slate-400 font-medium">5 May 2026</span>
                             </div>
 
-                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-[#0078D4] transition leading-snug" data-i18n="news_feat_title">
+                            <h3 class="text-lg sm:text-2xl font-black text-slate-900 group-hover:text-[#0078D4] transition leading-snug" data-i18n="news_feat_title">
                                 Upcoming changes to JOLT fares starting 1 May 2026
                             </h3>
 
@@ -1738,48 +1788,48 @@
                 </div>
 
                 <!-- Right: 3 Stacked Articles (matching Bolt Screenshot 2) -->
-                <div class="lg:col-span-5 bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-6 divide-y divide-slate-100">
+                <div class="lg:col-span-5 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xs p-5 sm:p-7 md:p-8 flex flex-col justify-between space-y-5 sm:space-y-6 divide-y divide-slate-100">
                     
                     <!-- Item 1 (Matching Bolt phone/app card in Electric Blue) -->
-                    <div class="group flex items-start gap-4 pt-1 cursor-pointer">
-                        <div class="w-14 h-14 rounded-2xl bg-[#0078D4] flex items-center justify-center text-white shrink-0 shadow-md shadow-blue-500/20 group-hover:scale-105 transition duration-200">
-                            <i data-lucide="smartphone" class="w-7 h-7 text-white"></i>
+                    <div class="group flex items-start gap-3.5 sm:gap-4 pt-1 cursor-pointer">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#0078D4] flex items-center justify-center text-white shrink-0 shadow-md shadow-blue-500/20 group-hover:scale-105 transition duration-200">
+                            <i data-lucide="smartphone" class="w-6 h-6 sm:w-7 sm:h-7 text-white"></i>
                         </div>
                         <div class="flex-1 space-y-1">
-                            <h4 class="text-sm font-bold text-slate-900 group-hover:text-[#0078D4] transition leading-snug line-clamp-2" data-i18n="news_1_title">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-[#0078D4] transition leading-snug line-clamp-2" data-i18n="news_1_title">
                                 To give you that extra layer of precision and peace of mind, JOLT introduces Live PIN 2.0
                             </h4>
-                            <div class="text-xs text-slate-400 font-medium">24 Mar 2026</div>
+                            <div class="text-[11px] sm:text-xs text-slate-400 font-medium">24 Mar 2026</div>
                         </div>
                     </div>
 
                     <!-- Item 2 (Matching Bolt passenger car photo) -->
-                    <div class="group flex items-start gap-4 pt-6 cursor-pointer">
-                        <div class="w-14 h-14 rounded-2xl overflow-hidden shrink-0 shadow-sm bg-slate-100">
+                    <div class="group flex items-start gap-3.5 sm:gap-4 pt-5 sm:pt-6 cursor-pointer">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shrink-0 shadow-xs bg-slate-100">
                             <img src="/images/passenger_booking.jpg" 
                                  alt="Abiria wa JOLT" 
                                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                         </div>
                         <div class="flex-1 space-y-1">
-                            <h4 class="text-sm font-bold text-slate-900 group-hover:text-[#0078D4] transition leading-snug line-clamp-2" data-i18n="news_2_title">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-[#0078D4] transition leading-snug line-clamp-2" data-i18n="news_2_title">
                                 JOLT Tanzania says thanks: win 3 months of free rides
                             </h4>
-                            <div class="text-xs text-slate-400 font-medium">2 Oct 2025</div>
+                            <div class="text-[11px] sm:text-xs text-slate-400 font-medium">2 Oct 2025</div>
                         </div>
                     </div>
 
                     <!-- Item 3 (Matching Bolt business travel photo) -->
-                    <div class="group flex items-start gap-4 pt-6 cursor-pointer">
-                        <div class="w-14 h-14 rounded-2xl overflow-hidden shrink-0 shadow-sm bg-slate-100">
+                    <div class="group flex items-start gap-3.5 sm:gap-4 pt-5 sm:pt-6 cursor-pointer">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shrink-0 shadow-xs bg-slate-100">
                             <img src="/images/service_driver.jpg" 
                                  alt="Usafiri wa Kibiashara" 
                                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                         </div>
                         <div class="flex-1 space-y-1">
-                            <h4 class="text-sm font-bold text-slate-900 group-hover:text-[#0078D4] transition leading-snug line-clamp-2" data-i18n="news_3_title">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-[#0078D4] transition leading-snug line-clamp-2" data-i18n="news_3_title">
                                 Business travel data reveals a transition towards a shorter work week
                             </h4>
-                            <div class="text-xs text-slate-400 font-medium">6 Aug 2025</div>
+                            <div class="text-[11px] sm:text-xs text-slate-400 font-medium">6 Aug 2025</div>
                         </div>
                     </div>
 
@@ -1791,12 +1841,12 @@
     </section>
 
     <!-- Global Footer -->
-    <footer class="bg-brand-obsidian text-slate-400 pt-16 pb-12 border-t border-brand-cardBorder text-sm">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-brand-cardBorder">
+    <footer class="bg-brand-obsidian text-slate-400 pt-12 sm:pt-16 pb-10 sm:pb-12 border-t border-brand-cardBorder text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 pb-10 sm:pb-12 border-b border-brand-cardBorder">
                 
                 <!-- Col 1: Brand & Bio -->
-                <div class="lg:col-span-2 space-y-4">
+                <div class="sm:col-span-2 space-y-4">
                     <div class="flex items-center gap-2.5">
                         <div class="w-10 h-10 rounded-2xl bg-[#0078D4] flex items-center justify-center text-white shadow-md shadow-blue-500/25">
                             <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1858,7 +1908,7 @@
             </div>
 
             <!-- Bottom bar -->
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <div class="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
                 <div>
                     &copy; <span id="current-year"></span> JOLT Mobility Technologies Ltd. <span data-i18n="footer_rights">Haki zote zimehifadhiwa.</span>
                 </div>
@@ -2580,8 +2630,8 @@
         };
 
         const apkDownloadUrls = {
-            passenger: '#pakua',
-            driver: '#pakua'
+            passenger: 'http://127.0.0.1:8000/downloads/passenger',
+            driver: 'http://127.0.0.1:8000/downloads/driver'
         };
 
         function handleAppDownload(type) {
@@ -2770,7 +2820,7 @@
                         <span>Fungua Google Play Store</span>
                     </a>
                     <a id="modal-direct-apk" 
-                       href="#pakua" 
+                       href="http://127.0.0.1:8000/downloads/passenger" 
                        class="btn-pill-outline w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold">
                         <i data-lucide="download" class="w-3.5 h-3.5"></i>
                         <span>Pakua APK Moja kwa Moja</span>
@@ -2788,4 +2838,3 @@
 
 </body>
 </html>
-
