@@ -1,0 +1,1673 @@
+﻿<!DOCTYPE html>
+<html lang="sw" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ufuatiliaji wa Safari - Dashibodi ya Utawala</title>
+    
+    <!-- Professional Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons Official CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Leaflet Map CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Tailwind CSS CDN with Dark Mode configured -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        ocean: {
+                            50: '#EFF6FC',
+                            100: '#E0F2FE',
+                            200: '#BAE6FD',
+                            500: '#0078D4',
+                            600: '#0063B1',
+                            700: '#004578',
+                        },
+                        brand: {
+                            primary: '#0078D4',
+                            primaryHover: '#0063B1',
+                            primaryLight: '#EFF6FC',
+                            primaryDark: '#004578',
+                            obsidian: '#090D15',
+                            surface: '#F8FAFC',
+                            cardBorder: '#E2E8F0',
+                        }
+                    }
+                }
+            }
+        };
+
+        // Instant Dark Mode Detection (Zero FOUC)
+        if (localStorage.getItem('jolt_dark_mode') === 'true' || 
+            (!('jolt_dark_mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.015em;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        /* Sidebar collapse transition & styles */
+        #admin-sidebar {
+            transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s ease, background-color 0.2s ease;
+        }
+
+        body.sidebar-collapsed .sidebar-text {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .sidebar-item {
+            justify-content: center !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            border-left-width: 0 !important;
+        }
+
+        body.sidebar-collapsed .sidebar-logo-text {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .sidebar-profile-text {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .sidebar-badge {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .sidebar-footer-actions {
+            display: none !important;
+        }
+
+        /* Tooltip on collapsed item */
+        body.sidebar-collapsed .sidebar-item-wrap {
+            position: relative;
+        }
+        body.sidebar-collapsed .sidebar-item-wrap:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-left: 12px;
+            padding: 5px 12px;
+            background: #090D15;
+            color: #FFFFFF;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        /* Scrollbar aesthetics */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* ========================================================
+           COMPREHENSIVE RESPONSIVE DARK MODE SYSTEM (JOLT PRO)
+           ======================================================== */
+        html.dark body,
+        html.dark main {
+            background-color: #0A0F1D !important;
+            color: #E2E8F0 !important;
+        }
+
+        html.dark #admin-sidebar {
+            background-color: #0F172A !important;
+            border-right-color: #1E293B !important;
+        }
+
+        html.dark #admin-sidebar .border-b,
+        html.dark #admin-sidebar .border-t {
+            border-color: #1E293B !important;
+        }
+
+        html.dark #admin-sidebar .sidebar-logo-text span.text-slate-900 {
+            color: #FFFFFF !important;
+        }
+
+        html.dark #admin-sidebar .sidebar-profile-text p.text-slate-800 {
+            color: #FFFFFF !important;
+        }
+
+        html.dark .sidebar-item {
+            color: #94A3B8 !important;
+        }
+
+        html.dark .sidebar-item:hover {
+            background-color: #1E293B !important;
+            color: #FFFFFF !important;
+        }
+
+        html.dark .sidebar-item.bg-\[\#EFF6FC\] {
+            background-color: rgba(0, 120, 212, 0.2) !important;
+            color: #38BDF8 !important;
+            border-left-color: #38BDF8 !important;
+        }
+
+        /* Cards, panels and containers in Dark Mode */
+        html.dark .bg-white {
+            background-color: #111A2E !important;
+            color: #E2E8F0 !important;
+        }
+
+        html.dark .border-slate-200,
+        html.dark .border-slate-200\/80,
+        html.dark .border-slate-200\/90,
+        html.dark .border-slate-200\/60,
+        html.dark .border-slate-100,
+        html.dark .border-blue-100,
+        html.dark .border-emerald-100,
+        html.dark .border-amber-100,
+        html.dark .border-rose-100,
+        html.dark .border-purple-100 {
+            border-color: #1E2B45 !important;
+        }
+
+        html.dark .text-slate-900,
+        html.dark .text-slate-800 {
+            color: #F8FAFC !important;
+        }
+
+        html.dark .text-slate-700,
+        html.dark .text-slate-600 {
+            color: #CBD5E1 !important;
+        }
+
+        html.dark .text-slate-500,
+        html.dark .text-slate-400 {
+            color: #94A3B8 !important;
+        }
+
+        html.dark .bg-slate-50,
+        html.dark .bg-slate-50\/75,
+        html.dark .bg-slate-50\/50 {
+            background-color: #0D1424 !important;
+        }
+
+        html.dark .hover\:bg-slate-50:hover,
+        html.dark .hover\:bg-slate-50\/50:hover {
+            background-color: #1A243B !important;
+        }
+
+        html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+        html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+            border-color: #1E2B45 !important;
+        }
+
+        html.dark .bg-slate-200,
+        html.dark .bg-slate-200\/70,
+        html.dark .bg-slate-200\/60 {
+            background-color: #1A243B !important;
+        }
+
+        html.dark .bg-slate-100 {
+            background-color: #1E293B !important;
+            color: #E2E8F0 !important;
+        }
+
+        html.dark input,
+        html.dark select,
+        html.dark textarea {
+            background-color: #0A0F1D !important;
+            border-color: #334155 !important;
+            color: #F8FAFC !important;
+        }
+
+        html.dark input::placeholder,
+        html.dark textarea::placeholder {
+            color: #64748B !important;
+        }
+
+        /* Dropdowns in Dark Mode */
+        html.dark #branchDropdown,
+        html.dark #langDropdown,
+        html.dark #notificationsDropdown,
+        html.dark #profileDropdown {
+            background-color: #111A2E !important;
+            border-color: #1E2B45 !important;
+            color: #F8FAFC !important;
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6) !important;
+        }
+
+        html.dark #branchDropdown a:hover,
+        html.dark #langDropdown a:hover,
+        html.dark #notificationsDropdown a:hover,
+        html.dark #profileDropdown a:hover {
+            background-color: #1A243B !important;
+            color: #38BDF8 !important;
+        }
+
+        /* Badges & Accent Pills in Dark Mode */
+        html.dark .bg-blue-50,
+        html.dark .bg-blue-50\/80 {
+            background-color: rgba(0, 120, 212, 0.15) !important;
+            color: #38BDF8 !important;
+            border-color: rgba(0, 120, 212, 0.3) !important;
+        }
+        html.dark .bg-emerald-50,
+        html.dark .bg-emerald-50\/80 {
+            background-color: rgba(16, 185, 129, 0.15) !important;
+            color: #34D399 !important;
+            border-color: rgba(16, 185, 129, 0.3) !important;
+        }
+        html.dark .bg-amber-50,
+        html.dark .bg-amber-50\/80 {
+            background-color: rgba(245, 158, 11, 0.15) !important;
+            color: #FBBF24 !important;
+            border-color: rgba(245, 158, 11, 0.3) !important;
+        }
+        html.dark .bg-rose-50,
+        html.dark .bg-rose-50\/80 {
+            background-color: rgba(244, 63, 94, 0.15) !important;
+            color: #FB7185 !important;
+            border-color: rgba(244, 63, 94, 0.3) !important;
+        }
+        html.dark .bg-purple-50,
+        html.dark .bg-purple-50\/80 {
+            background-color: rgba(168, 85, 247, 0.15) !important;
+            color: #C084FC !important;
+            border-color: rgba(168, 85, 247, 0.3) !important;
+        }
+        html.dark .bg-sky-50 {
+            background-color: rgba(14, 165, 233, 0.15) !important;
+            color: #38BDF8 !important;
+        }
+
+        html.dark .bg-emerald-100 {
+            background-color: rgba(16, 185, 129, 0.25) !important;
+            color: #6EE7B7 !important;
+        }
+        html.dark .bg-rose-100 {
+            background-color: rgba(244, 63, 94, 0.25) !important;
+            color: #FDA4AF !important;
+        }
+        html.dark .bg-amber-100 {
+            background-color: rgba(245, 158, 11, 0.25) !important;
+            color: #FCD34D !important;
+        }
+        html.dark .bg-blue-100 {
+            background-color: rgba(0, 120, 212, 0.25) !important;
+            color: #7DD3FC !important;
+        }
+        html.dark .bg-purple-100 {
+            background-color: rgba(168, 85, 247, 0.25) !important;
+            color: #D8B4FE !important;
+        }
+
+        /* Map Tiles in Dark Mode */
+        html.dark #fleetMap .leaflet-tile {
+            filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.35) brightness(0.75);
+        }
+        html.dark .leaflet-container {
+            background-color: #0A0F1D !important;
+        }
+
+        html.dark ::-webkit-scrollbar-track {
+            background: #0A0F1D !important;
+        }
+        html.dark ::-webkit-scrollbar-thumb {
+            background: #334155 !important;
+        }
+    </style>
+</head>
+<body class="h-full flex overflow-hidden text-slate-800 bg-[#F4F7FB] dark:bg-[#0A0F1D] dark:text-slate-100">
+
+    <!-- Mobile Off-Canvas Sidebar Backdrop -->
+    <div id="sidebar-backdrop" onclick="closeMobileSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <!-- Collapsible & Mobile Off-Canvas Modern Sidebar -->
+    <aside id="admin-sidebar" class="fixed lg:static inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 w-64 bg-white dark:bg-[#0F172A] border-r border-slate-200/90 dark:border-slate-800 flex flex-col flex-shrink-0 select-none shadow-2xl lg:shadow-none">
+        
+        <!-- Logo Section with Mobile Close Button -->
+        <div class="h-16 flex items-center justify-between px-5 border-b border-slate-100 dark:border-slate-800 gap-3">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-xl bg-[#0078D4] flex items-center justify-center font-black text-white text-lg shadow-sm group-hover:scale-105 transition-transform shrink-0">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                </div>
+                <div class="sidebar-logo-text min-w-0">
+                    <span class="text-xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-0.5">
+                        JOLT<span class="text-[#0078D4]">.</span>
+                    </span>
+                    <span class="text-[9px] block font-extrabold text-[#0078D4] tracking-widest uppercase -mt-1">
+                        Mobility Admin
+                    </span>
+                </div>
+            </a>
+
+            <!-- Mobile Close Button (Visible on phones only) -->
+            <button onclick="closeMobileSidebar()" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Funga Menyu">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Navigation Links with Unified Corporate Styling (Clean, No Rainbow Chaos) -->
+        <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+            
+            <!-- 1. Dashibodi Kuu (Dashboard) -->
+            <div class="sidebar-item-wrap" data-tooltip="Dashibodi Kuu">
+                <a href="index.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate">Dashibodi Kuu</span>
+                </a>
+            </div>
+
+            <!-- 2. Vijiwe vya Boda (Stands) -->
+            <div class="sidebar-item-wrap" data-tooltip="Vijiwe vya Boda">
+                <a href="stands.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="store" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Vijiwe vya Boda</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Stand</span>
+                </a>
+            </div>
+
+            <!-- 3. JOLT Energy & Betri (EV Swap) -->
+            <div class="sidebar-item-wrap" data-tooltip="JOLT Energy & Betri">
+                <a href="energy.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">JOLT Energy & Betri</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">EV Swap</span>
+                </a>
+            </div>
+
+            <!-- 4. Madereva & KYC (NIDA) -->
+            <div class="sidebar-item-wrap" data-tooltip="Madereva & KYC">
+                <a href="drivers.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="user-check" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Madereva & KYC</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">NIDA</span>
+                </a>
+            </div>
+
+            <!-- 5. Vyombo vya Moto (Fleet) -->
+            <div class="sidebar-item-wrap" data-tooltip="Vyombo vya Moto">
+                <a href="vehicles.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="bike" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Vyombo vya Moto</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Fleet</span>
+                </a>
+            </div>
+
+            <!-- 6. Ufuatiliaji Safari (Trips Tracking) -->
+            <div class="sidebar-item-wrap" data-tooltip="Ufuatiliaji Safari">
+                <a href="rides.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#EFF6FC] dark:bg-[#0078D4]/15 text-[#0078D4] dark:text-[#38BDF8] border-l-4 border-[#0078D4] shadow-xs font-black">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-[#0078D4]">
+                        <i data-lucide="navigation" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Ufuatiliaji Safari</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Live</span>
+                </a>
+            </div>
+
+            <!-- 7. Kesi & Usalama (Incidents) -->
+            <div class="sidebar-item-wrap" data-tooltip="Kesi & Usalama">
+                <a href="incidents.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Kesi & Usalama</span>
+                    <span class="sidebar-badge text-[10px] font-black px-1.5 py-0.5 rounded-md bg-red-50 text-red-600 dark:bg-red-950/60 dark:text-red-400">SOS</span>
+                </a>
+            </div>
+
+            <!-- 8. Mipangilio ya Bei (Fares) -->
+            <div class="sidebar-item-wrap" data-tooltip="Mipangilio ya Bei">
+                <a href="fares.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="coins" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Mipangilio ya Bei</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Nauli</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Current Admin Footer -->
+        <div class="p-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0D1424] flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-full bg-[#0078D4] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
+                    AM
+                </div>
+                <div class="sidebar-profile-text min-w-0">
+                    <p class="text-xs font-black text-slate-800 dark:text-slate-200 truncate">arrifai mun...</p>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold truncate">Administrator</p>
+                </div>
+            </div>
+            <div class="sidebar-footer-actions flex items-center gap-1 text-slate-400">
+                <a href="fares.html" class="p-1.5 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-lg transition" title="Mipangilio">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                </a>
+                <a href="../index.html" target="_blank" class="p-1.5 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-lg transition" title="Tovuti">
+                    <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden min-w-0">
+        
+        <!-- Top Navbar: Clean, High-Contrast Bright Header (No Dimness, Crystal-Clear Icons) -->
+        <header class="h-16 bg-white dark:bg-[#0F172A] border-b border-slate-200/90 dark:border-slate-800 flex items-center justify-between px-3 sm:px-6 flex-shrink-0 z-30 shadow-xs text-slate-800 dark:text-slate-100 select-none">
+            
+            <!-- Left: Mobile Menu Button & Desktop Sidebar Toggle -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Mobile Hamburger Button -->
+                <button id="mobile-sidebar-toggle" onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 transition" aria-label="Fungua Menyu ya Dashibodi">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Desktop Sidebar Collapse Toggle Button -->
+                <button id="sidebar-toggle" onclick="toggleSidebar()" class="hidden lg:flex w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 items-center justify-center transition shadow-xs cursor-pointer border border-slate-200/80 dark:border-slate-700" title="Funga / Fungua Sidebar">
+                    <i data-lucide="chevrons-left" id="sidebar-toggle-icon" class="w-4 h-4"></i>
+                </button>
+
+                <div class="hidden sm:flex items-center gap-2 pl-1">
+                    <a href="../index.html" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition border border-slate-200/80 dark:border-slate-700">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#0078D4]"></i>
+                        <span>Tazama Tovuti Kuu</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Controls: Crisp High-Visibility Badges, Switchers, Dropdowns & User Menu -->
+            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                
+                <!-- Main Branch / Makao Makuu Pill with Interactive Dropdown -->
+                <div class="relative hidden md:block">
+                    <button onclick="toggleDropdown('branchDropdown', event)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
+                        <i data-lucide="building" class="w-3.5 h-3.5 text-[#0078D4]"></i>
+                        <span id="currentBranchLabel">Makao Makuu Dar</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+                    </button>
+                    <div id="branchDropdown" class="hidden absolute left-0 mt-2 w-52 bg-white dark:bg-[#111A2E] rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-1.5 text-slate-800 dark:text-slate-100 text-xs font-bold z-50">
+                        <div class="px-3 py-1.5 text-[10px] uppercase font-black text-slate-400 border-b border-slate-100 dark:border-slate-800">Chagua Kanda / Tawi</div>
+                        <a href="javascript:void(0)" onclick="selectBranch('Makao Makuu Dar')" class="block px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4] flex items-center justify-between">
+                            <span>Makao Makuu (Dar)</span>
+                            <span class="text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-black">Active</span>
+                        </a>
+                        <a href="javascript:void(0)" onclick="selectBranch('Kituo cha Arusha')" class="block px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4]">Kanda ya Kaskazini (Arusha)</a>
+                        <a href="javascript:void(0)" onclick="selectBranch('Kituo cha Mwanza')" class="block px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4]">Kanda ya Ziwa (Mwanza)</a>
+                        <a href="javascript:void(0)" onclick="selectBranch('Kituo cha Dodoma')" class="block px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4]">Makao Makuu Dodoma</a>
+                    </div>
+                </div>
+
+                <!-- Language Pill with Dropdown (Using Clean SVG Flags) -->
+                <div class="relative">
+                    <button onclick="toggleDropdown('langDropdown', event)" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition" title="Badili Lugha">
+                        <span id="currentFlag" class="flex items-center shrink-0">
+                            <svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden" viewBox="0 0 36 24">
+                                <polygon points="0 0, 36 0, 0 24" fill="#1EB53A"/>
+                                <polygon points="36 0, 36 24, 0 24" fill="#00A3DD"/>
+                                <polygon points="0 24, 8 24, 36 5.33, 36 0, 28 0, 0 18.67" fill="#FCD116"/>
+                                <polygon points="0 24, 5.33 24, 36 3.55, 36 0, 30.67 0, 0 20.44" fill="#000000"/>
+                            </svg>
+                        </span>
+                        <span id="currentLangLabel">SW</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+                    </button>
+                    <div id="langDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-[#111A2E] rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-1.5 text-slate-800 dark:text-slate-100 text-xs font-bold z-50">
+                        <a href="javascript:void(0)" onclick="selectLang('sw')" class="px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4] flex items-center gap-2.5">
+                            <svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden shrink-0" viewBox="0 0 36 24">
+                                <polygon points="0 0, 36 0, 0 24" fill="#1EB53A"/>
+                                <polygon points="36 0, 36 24, 0 24" fill="#00A3DD"/>
+                                <polygon points="0 24, 8 24, 36 5.33, 36 0, 28 0, 0 18.67" fill="#FCD116"/>
+                                <polygon points="0 24, 5.33 24, 36 3.55, 36 0, 30.67 0, 0 20.44" fill="#000000"/>
+                            </svg>
+                            <span>Kiswahili</span>
+                        </a>
+                        <a href="javascript:void(0)" onclick="selectLang('en')" class="px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4] flex items-center gap-2.5">
+                            <svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden shrink-0" viewBox="0 0 60 36">
+                                <rect width="60" height="36" fill="#012169"/>
+                                <path d="M0,0 L60,36 M60,0 L0,36" stroke="#ffffff" stroke-width="7"/>
+                                <path d="M0,0 L60,36" stroke="#C8102E" stroke-width="4"/>
+                                <path d="M60,0 L0,36" stroke="#C8102E" stroke-width="4"/>
+                                <path d="M30,0 V36 M0,18 H60" stroke="#ffffff" stroke-width="11"/>
+                                <path d="M30,0 V36 M0,18 H60" stroke="#C8102E" stroke-width="6.5"/>
+                            </svg>
+                            <span>English</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mode Pill (Dark/Light toggle) -->
+                <button onclick="toggleDarkMode()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition" title="Badili Muonekano">
+                    <i data-lucide="moon" id="modeIcon" class="w-3.5 h-3.5 text-slate-600 dark:text-amber-400"></i>
+                    <span class="hidden sm:inline" id="modeText">Mode</span>
+                </button>
+
+                <!-- Notification Bell with High-Visibility Red Badge -->
+                <div class="relative">
+                    <button onclick="toggleDropdown('notificationsDropdown', event)" class="relative p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-200 transition cursor-pointer" title="Arifa & Tahadhari">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center animate-pulse">
+                            3
+                        </span>
+                    </button>
+                    <div id="notificationsDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-[#111A2E] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 py-2 text-slate-800 dark:text-slate-100 z-50">
+                        <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <span class="font-extrabold text-xs text-slate-900 dark:text-white">Arifa & Tahadhari za Moja kwa Moja</span>
+                            <span class="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded font-black">3 Mpya</span>
+                        </div>
+                        <div class="max-h-72 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+                            <a href="incidents.html" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-start gap-2.5 block transition">
+                                <span class="w-2 h-2 rounded-full bg-red-500 mt-1 shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white">Kesi ya Dharura (SOS)</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Msaada wa safari unahitajika kituo cha Mwenge.</p>
+                                    <span class="text-[9px] text-slate-400 mt-1 block">Dakika 5 zilizopita</span>
+                                </div>
+                            </a>
+                            <a href="/admin/drivers?status=pending_review" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-start gap-2.5 block transition">
+                                <span class="w-2 h-2 rounded-full bg-amber-500 mt-1 shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white">Madereva Wapya Wanasubiri Uhakiki</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Nyaraka za NIDA na leseni za udereva zimetumwa.</p>
+                                    <span class="text-[9px] text-slate-400 mt-1 block">Saa 1 lililopita</span>
+                                </div>
+                            </a>
+                            <a href="energy.html" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-start gap-2.5 block transition">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 mt-1 shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white">Miamala ya Kubadili Betri (EV Swap)</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Kituo cha Petrocity Sinza: Betri 6 zimebadilishwa.</p>
+                                    <span class="text-[9px] text-slate-400 mt-1 block">Saa 2 zilizopita</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="p-2 border-t border-slate-100 dark:border-slate-800 text-center">
+                            <a href="rides.html" class="text-xs font-bold text-[#0078D4] hover:underline">Tazama kumbukumbu zote &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile Pill with Interactive Menu -->
+                <div class="relative">
+                    <button onclick="toggleDropdown('profileDropdown', event)" class="inline-flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition cursor-pointer">
+                        <div class="w-6 h-6 rounded-full bg-[#0078D4] text-white flex items-center justify-center text-[10px] font-black shadow-xs">
+                            AM
+                        </div>
+                        <span class="hidden sm:inline">Admin ▾</span>
+                    </button>
+                    <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white dark:bg-[#111A2E] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 py-2 text-slate-800 dark:text-slate-100 z-50">
+                        <div class="px-4 py-2.5 border-b border-slate-100 dark:border-slate-800">
+                            <p class="font-black text-xs text-slate-900 dark:text-white">arrifai muntazir</p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">admin@jolt.co.tz</p>
+                            <span class="mt-1 inline-block text-[9px] font-black uppercase px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/50 text-[#0078D4] dark:text-sky-300">Super Administrator</span>
+                        </div>
+                        <div class="py-1 text-xs font-bold">
+                            <a href="fares.html" class="px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                <i data-lucide="coins" class="w-4 h-4 text-slate-400"></i>
+                                <span>Mipangilio ya Bei</span>
+                            </a>
+                            <a href="stands.html" class="px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                <i data-lucide="store" class="w-4 h-4 text-slate-400"></i>
+                                <span>Vijiwe & Vituo</span>
+                            </a>
+                            <a href="energy.html" class="px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                <i data-lucide="zap" class="w-4 h-4 text-slate-400"></i>
+                                <span>Mtandao wa Betri</span>
+                            </a>
+                        </div>
+                        <div class="border-t border-slate-100 dark:border-slate-800 pt-1">
+                            <a href="../index.html" target="_blank" class="px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 text-slate-700 dark:text-slate-300 text-xs font-bold">
+                                <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+                                <span>Tovuti Kuu</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Dynamic Body -->
+        <main class="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 bg-[#F4F7FB] dark:bg-[#0A0F1D]">
+            
+            
+            
+            <div class="space-y-6">
+    <!-- Header with Action -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-white rounded-2xl border border-slate-200/90 shadow-xs">
+        <div>
+            <h2 class="text-xl font-black text-slate-900 tracking-tight">Ufuatiliaji wa Safari (Live & History)</h2>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Safari 19 zilizorekodiwa &bull; Tozo ya JOLT ni TZS 0 (0% Kamisheni)</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Safari Zinasajiliwa na Abiria Kwenye App</span>
+            </span>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2 bg-slate-200/70 p-1.5 rounded-xl text-xs font-bold">
+            <a href="rides.html" class="px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm">Zote</a>
+            <a href="/admin/rides?status=in_progress" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900">Zinazoendelea</a>
+            <a href="/admin/rides?status=completed" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900">Zilizokamilika</a>
+            <a href="/admin/rides?status=cancelled" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900">Zilizoghairiwa</a>
+        </div>
+    </div>
+
+    <!-- Rides Table -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-100">
+                        <th class="py-4 px-6">Usafiri</th>
+                        <th class="py-4 px-6">Abiria</th>
+                        <th class="py-4 px-6">Dereva</th>
+                        <th class="py-4 px-6">Njia & Maeneo</th>
+                        <th class="py-4 px-6">PIN</th>
+                        <th class="py-4 px-6">Nauli</th>
+                        <th class="py-4 px-6">Hadhi</th>
+                        <th class="py-4 px-6 text-right">Vitendo</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-sm font-medium">
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                6854
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/2bf931d0-e385-4ea3-9901-8128f2cba700/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                8473
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/a2339892-fedf-4782-8d18-d623b574a67c/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                5307
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/8911ec0c-0774-47d4-8d83-905ea22e8044/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                6667
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/ad47139a-f312-4358-9f3a-47a33f702ce4/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                3646
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/0a9d215a-0ef2-4061-954b-1a598d9bd3ef/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                3124
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/edff2c75-1da3-4430-9d9a-1ba84450e246/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                7655
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/139e4d59-5367-45dc-af8b-adde471e4e84/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                6596
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/a9e19421-1c3d-47be-8966-808f3abdb349/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                7611
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/bde1ffb5-8d10-4a25-8563-152878967c2a/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                8043
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/bf3d9ba3-689a-47b1-be31-e187712a48f6/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                6004
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/012183e7-c9e3-42bf-8970-1549724f34ef/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                6343
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/d9ece77a-28fc-48af-9b6a-043421271dc9/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                3668
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/1bee77cc-558c-45d6-a908-68d8d22a8a14/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Basic
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">John Magufuli Road Test</p>
+                                <p class="text-xs text-slate-400">+255712999888</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Msimbazi</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Mwenge IT Market</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                1714
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 5,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/c74b5beb-eb79-45da-8331-a863b1a073f0/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Boda
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">Abiria</p>
+                                <p class="text-xs text-slate-400">+255712345678</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Ally Mohamed</p>
+                                <p class="text-xs text-slate-400">MC 321 KY</p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Posta Mpya, Dar es Salaam</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Kwa Azizi Ali Bus Stop, Dar es Salaam</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                8492
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 1,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/5c9ca69d-6aac-47e6-9269-20d1b91871a6/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Go
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">Abiria</p>
+                                <p class="text-xs text-slate-400">+255712345678</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Juma Selemani</p>
+                                <p class="text-xs text-slate-400">T 342 DKT</p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Posta, Dar es Salaam</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Masaki, Dar es Salaam</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                7719
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 6,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/d7155bea-c764-4a8b-95f5-a826d88904f6/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Go
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">Abiria</p>
+                                <p class="text-xs text-slate-400">+255712345678</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Bado Hajapangiwa</p>
+                                <p class="text-xs text-slate-400"></p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Posta, Dar es Salaam</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Masaki, Dar es Salaam</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                ----
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 6,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+                                        Inatafuta Dereva
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                            <form action="http://127.0.0.1:8000/admin/rides/8c99ee88-d94e-46ff-a47e-b342875b1a59/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="completed">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-bold transition cursor-pointer" title="Weka Imekamilika">
+                                                <i data-lucide="check" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/8c99ee88-d94e-46ff-a47e-b342875b1a59/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Boda
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">Abiria</p>
+                                <p class="text-xs text-slate-400">+255712345678</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Ally Mohamed</p>
+                                <p class="text-xs text-slate-400">MC 321 KY</p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Kariakoo Market, Dar es Salaam</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Chang&#039;ombe police DSM, Temeke Street</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                8492
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 1,500
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/0062416f-d78e-48df-84af-d44ea6b82b3f/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                            <tr class="hover:bg-slate-50 transition">
+                            <td class="py-4 px-6 font-bold text-slate-900">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 uppercase">
+                                    JOLT Boda
+                                </span>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-extrabold text-slate-900">Abiria</p>
+                                <p class="text-xs text-slate-400">+255712345678</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="font-bold text-slate-900">Ally Mohamed</p>
+                                <p class="text-xs text-slate-400">MC 321 KY</p>
+                            </td>
+                            <td class="py-4 px-6 max-w-xs">
+                                <p class="truncate text-xs font-bold text-slate-800">📍 Spice Hotel, 3 Tandamti Street</p>
+                                <p class="truncate text-xs text-slate-500 mt-1">🏁 Posta Mpya, Dar es Salaam</p>
+                            </td>
+                            <td class="py-4 px-6 font-mono font-bold text-[#0078D4] text-sm">
+                                8492
+                            </td>
+                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                                TZS 1,000
+                                <span class="block text-[10px] text-emerald-600 font-bold">0% Kamisheni</span>
+                            </td>
+                            <td class="py-4 px-6">
+                                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                        ✓ Imekamilika
+                                    </span>
+                                                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <div class="inline-flex items-center gap-1.5 justify-end">
+                                                                                                                <form action="http://127.0.0.1:8000/admin/rides/10a543d4-919a-4c15-820c-5850280ee474/status" method="POST">
+                                            <input type="hidden" name="_token" value="2CoELvy1k4QMuSiQG06KcoTc0qThpGaCWSz02JBl" autocomplete="off">                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="p-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold transition cursor-pointer" title="Ghairi Safari">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                                                    </div>
+                            </td>
+                        </tr>
+                                    </tbody>
+            </table>
+        </div>
+
+            </div>
+</div>
+
+
+        </main>
+    </div>
+
+    <!-- JavaScript for Sidebar, Dropdowns & Interactive Controls -->
+    <script>
+        // Mobile Sidebar Controls
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (!sidebar) return;
+            const isOpen = sidebar.classList.contains('translate-x-0');
+            if (isOpen) {
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+                if (backdrop) backdrop.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('translate-x-0');
+                if (backdrop) backdrop.classList.remove('hidden');
+            }
+        }
+
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (sidebar) {
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+            }
+            if (backdrop) {
+                backdrop.classList.add('hidden');
+            }
+        }
+
+        // Desktop Sidebar Collapse Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const toggleIcon = document.getElementById('sidebar-toggle-icon');
+            const isCurrentlyCollapsed = sidebar.classList.contains('w-20');
+
+            if (isCurrentlyCollapsed) {
+                sidebar.classList.remove('w-20');
+                sidebar.classList.add('w-64');
+                document.body.classList.remove('sidebar-collapsed');
+                if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'chevrons-left');
+                localStorage.setItem('jolt_sidebar_collapsed', 'false');
+            } else {
+                sidebar.classList.remove('w-64');
+                sidebar.classList.add('w-20');
+                document.body.classList.add('sidebar-collapsed');
+                if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'chevrons-right');
+                localStorage.setItem('jolt_sidebar_collapsed', 'true');
+            }
+            lucide.createIcons();
+        }
+
+        // Dropdown toggle
+        function toggleDropdown(id, event) {
+            if (event) event.stopPropagation();
+            const el = document.getElementById(id);
+            const allDropdowns = ['branchDropdown', 'langDropdown', 'notificationsDropdown', 'profileDropdown'];
+            allDropdowns.forEach(d => {
+                if (d !== id) {
+                    const other = document.getElementById(d);
+                    if (other) other.classList.add('hidden');
+                }
+            });
+            if (el) el.classList.toggle('hidden');
+        }
+
+        // Close dropdowns on outside click
+        window.addEventListener('click', function(e) {
+            const allDropdowns = ['branchDropdown', 'langDropdown', 'notificationsDropdown', 'profileDropdown'];
+            allDropdowns.forEach(d => {
+                const el = document.getElementById(d);
+                if (el && !el.classList.contains('hidden')) {
+                    el.classList.add('hidden');
+                }
+            });
+        });
+
+        // Close mobile sidebar on desktop resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                closeMobileSidebar();
+            }
+        });
+
+        // Branch Switcher
+        function selectBranch(name) {
+            document.getElementById('currentBranchLabel').textContent = name;
+            const el = document.getElementById('branchDropdown');
+            if (el) el.classList.add('hidden');
+        }
+
+        // Language Switcher with SVG Flags
+        function selectLang(code) {
+            const currentFlag = document.getElementById('currentFlag');
+            const currentLangLabel = document.getElementById('currentLangLabel');
+            if (code === 'en') {
+                if (currentFlag) {
+                    currentFlag.innerHTML = `<svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden" viewBox="0 0 60 36">
+                        <rect width="60" height="36" fill="#012169"/>
+                        <path d="M0,0 L60,36 M60,0 L0,36" stroke="#ffffff" stroke-width="7"/>
+                        <path d="M0,0 L60,36" stroke="#C8102E" stroke-width="4"/>
+                        <path d="M60,0 L0,36" stroke="#C8102E" stroke-width="4"/>
+                        <path d="M30,0 V36 M0,18 H60" stroke="#ffffff" stroke-width="11"/>
+                        <path d="M30,0 V36 M0,18 H60" stroke="#C8102E" stroke-width="6.5"/>
+                    </svg>`;
+                }
+                if (currentLangLabel) currentLangLabel.textContent = 'EN';
+            } else {
+                if (currentFlag) {
+                    currentFlag.innerHTML = `<svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden" viewBox="0 0 36 24">
+                        <polygon points="0 0, 36 0, 0 24" fill="#1EB53A"/>
+                        <polygon points="36 0, 36 24, 0 24" fill="#00A3DD"/>
+                        <polygon points="0 24, 8 24, 36 5.33, 36 0, 28 0, 0 18.67" fill="#FCD116"/>
+                        <polygon points="0 24, 5.33 24, 36 3.55, 36 0, 30.67 0, 0 20.44" fill="#000000"/>
+                    </svg>`;
+                }
+                if (currentLangLabel) currentLangLabel.textContent = 'SW';
+            }
+            const el = document.getElementById('langDropdown');
+            if (el) el.classList.add('hidden');
+        }
+
+        // Dark / Light Mode Toggle
+        function updateModeUi(isDark) {
+            const icon = document.getElementById('modeIcon');
+            const text = document.getElementById('modeText');
+            if (isDark) {
+                if (icon) icon.setAttribute('data-lucide', 'sun');
+                if (text) text.textContent = 'Mwanga';
+            } else {
+                if (icon) icon.setAttribute('data-lucide', 'moon');
+                if (text) text.textContent = 'Giza';
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('jolt_dark_mode', isDark ? 'true' : 'false');
+            updateModeUi(isDark);
+        }
+
+        // Initialize state on load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('jolt_sidebar_collapsed') === 'true' && window.innerWidth >= 1024) {
+                const sidebar = document.getElementById('admin-sidebar');
+                const toggleIcon = document.getElementById('sidebar-toggle-icon');
+                if (sidebar) {
+                    sidebar.classList.remove('w-64');
+                    sidebar.classList.add('w-20');
+                    document.body.classList.add('sidebar-collapsed');
+                    if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'chevrons-right');
+                }
+            }
+            updateModeUi(document.documentElement.classList.contains('dark'));
+            if (window.lucide) lucide.createIcons();
+        });
+    </script>
+    </body>
+</html>

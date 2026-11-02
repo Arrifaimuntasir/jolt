@@ -1,0 +1,1638 @@
+﻿<!DOCTYPE html>
+<html lang="sw" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashibodi Kuu - Dashibodi ya Utawala</title>
+    
+    <!-- Professional Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons Official CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Leaflet Map CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Tailwind CSS CDN with Dark Mode configured -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        ocean: {
+                            50: '#EFF6FC',
+                            100: '#E0F2FE',
+                            200: '#BAE6FD',
+                            500: '#0078D4',
+                            600: '#0063B1',
+                            700: '#004578',
+                        },
+                        brand: {
+                            primary: '#0078D4',
+                            primaryHover: '#0063B1',
+                            primaryLight: '#EFF6FC',
+                            primaryDark: '#004578',
+                            obsidian: '#090D15',
+                            surface: '#F8FAFC',
+                            cardBorder: '#E2E8F0',
+                        }
+                    }
+                }
+            }
+        };
+
+        // Instant Dark Mode Detection (Zero FOUC)
+        if (localStorage.getItem('jolt_dark_mode') === 'true' || 
+            (!('jolt_dark_mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.015em;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        /* Sidebar collapse transition & styles */
+        #admin-sidebar {
+            transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s ease, background-color 0.2s ease;
+        }
+
+        body.sidebar-collapsed .sidebar-text {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .sidebar-item {
+            justify-content: center !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            border-left-width: 0 !important;
+        }
+
+        body.sidebar-collapsed .sidebar-logo-text {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .sidebar-profile-text {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .sidebar-badge {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .sidebar-footer-actions {
+            display: none !important;
+        }
+
+        /* Tooltip on collapsed item */
+        body.sidebar-collapsed .sidebar-item-wrap {
+            position: relative;
+        }
+        body.sidebar-collapsed .sidebar-item-wrap:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-left: 12px;
+            padding: 5px 12px;
+            background: #090D15;
+            color: #FFFFFF;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        /* Scrollbar aesthetics */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* ========================================================
+           COMPREHENSIVE RESPONSIVE DARK MODE SYSTEM (JOLT PRO)
+           ======================================================== */
+        html.dark body,
+        html.dark main {
+            background-color: #0A0F1D !important;
+            color: #E2E8F0 !important;
+        }
+
+        html.dark #admin-sidebar {
+            background-color: #0F172A !important;
+            border-right-color: #1E293B !important;
+        }
+
+        html.dark #admin-sidebar .border-b,
+        html.dark #admin-sidebar .border-t {
+            border-color: #1E293B !important;
+        }
+
+        html.dark #admin-sidebar .sidebar-logo-text span.text-slate-900 {
+            color: #FFFFFF !important;
+        }
+
+        html.dark #admin-sidebar .sidebar-profile-text p.text-slate-800 {
+            color: #FFFFFF !important;
+        }
+
+        html.dark .sidebar-item {
+            color: #94A3B8 !important;
+        }
+
+        html.dark .sidebar-item:hover {
+            background-color: #1E293B !important;
+            color: #FFFFFF !important;
+        }
+
+        html.dark .sidebar-item.bg-\[\#EFF6FC\] {
+            background-color: rgba(0, 120, 212, 0.2) !important;
+            color: #38BDF8 !important;
+            border-left-color: #38BDF8 !important;
+        }
+
+        /* Cards, panels and containers in Dark Mode */
+        html.dark .bg-white {
+            background-color: #111A2E !important;
+            color: #E2E8F0 !important;
+        }
+
+        html.dark .border-slate-200,
+        html.dark .border-slate-200\/80,
+        html.dark .border-slate-200\/90,
+        html.dark .border-slate-200\/60,
+        html.dark .border-slate-100,
+        html.dark .border-blue-100,
+        html.dark .border-emerald-100,
+        html.dark .border-amber-100,
+        html.dark .border-rose-100,
+        html.dark .border-purple-100 {
+            border-color: #1E2B45 !important;
+        }
+
+        html.dark .text-slate-900,
+        html.dark .text-slate-800 {
+            color: #F8FAFC !important;
+        }
+
+        html.dark .text-slate-700,
+        html.dark .text-slate-600 {
+            color: #CBD5E1 !important;
+        }
+
+        html.dark .text-slate-500,
+        html.dark .text-slate-400 {
+            color: #94A3B8 !important;
+        }
+
+        html.dark .bg-slate-50,
+        html.dark .bg-slate-50\/75,
+        html.dark .bg-slate-50\/50 {
+            background-color: #0D1424 !important;
+        }
+
+        html.dark .hover\:bg-slate-50:hover,
+        html.dark .hover\:bg-slate-50\/50:hover {
+            background-color: #1A243B !important;
+        }
+
+        html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+        html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+            border-color: #1E2B45 !important;
+        }
+
+        html.dark .bg-slate-200,
+        html.dark .bg-slate-200\/70,
+        html.dark .bg-slate-200\/60 {
+            background-color: #1A243B !important;
+        }
+
+        html.dark .bg-slate-100 {
+            background-color: #1E293B !important;
+            color: #E2E8F0 !important;
+        }
+
+        html.dark input,
+        html.dark select,
+        html.dark textarea {
+            background-color: #0A0F1D !important;
+            border-color: #334155 !important;
+            color: #F8FAFC !important;
+        }
+
+        html.dark input::placeholder,
+        html.dark textarea::placeholder {
+            color: #64748B !important;
+        }
+
+        /* Dropdowns in Dark Mode */
+        html.dark #branchDropdown,
+        html.dark #langDropdown,
+        html.dark #notificationsDropdown,
+        html.dark #profileDropdown {
+            background-color: #111A2E !important;
+            border-color: #1E2B45 !important;
+            color: #F8FAFC !important;
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6) !important;
+        }
+
+        html.dark #branchDropdown a:hover,
+        html.dark #langDropdown a:hover,
+        html.dark #notificationsDropdown a:hover,
+        html.dark #profileDropdown a:hover {
+            background-color: #1A243B !important;
+            color: #38BDF8 !important;
+        }
+
+        /* Badges & Accent Pills in Dark Mode */
+        html.dark .bg-blue-50,
+        html.dark .bg-blue-50\/80 {
+            background-color: rgba(0, 120, 212, 0.15) !important;
+            color: #38BDF8 !important;
+            border-color: rgba(0, 120, 212, 0.3) !important;
+        }
+        html.dark .bg-emerald-50,
+        html.dark .bg-emerald-50\/80 {
+            background-color: rgba(16, 185, 129, 0.15) !important;
+            color: #34D399 !important;
+            border-color: rgba(16, 185, 129, 0.3) !important;
+        }
+        html.dark .bg-amber-50,
+        html.dark .bg-amber-50\/80 {
+            background-color: rgba(245, 158, 11, 0.15) !important;
+            color: #FBBF24 !important;
+            border-color: rgba(245, 158, 11, 0.3) !important;
+        }
+        html.dark .bg-rose-50,
+        html.dark .bg-rose-50\/80 {
+            background-color: rgba(244, 63, 94, 0.15) !important;
+            color: #FB7185 !important;
+            border-color: rgba(244, 63, 94, 0.3) !important;
+        }
+        html.dark .bg-purple-50,
+        html.dark .bg-purple-50\/80 {
+            background-color: rgba(168, 85, 247, 0.15) !important;
+            color: #C084FC !important;
+            border-color: rgba(168, 85, 247, 0.3) !important;
+        }
+        html.dark .bg-sky-50 {
+            background-color: rgba(14, 165, 233, 0.15) !important;
+            color: #38BDF8 !important;
+        }
+
+        html.dark .bg-emerald-100 {
+            background-color: rgba(16, 185, 129, 0.25) !important;
+            color: #6EE7B7 !important;
+        }
+        html.dark .bg-rose-100 {
+            background-color: rgba(244, 63, 94, 0.25) !important;
+            color: #FDA4AF !important;
+        }
+        html.dark .bg-amber-100 {
+            background-color: rgba(245, 158, 11, 0.25) !important;
+            color: #FCD34D !important;
+        }
+        html.dark .bg-blue-100 {
+            background-color: rgba(0, 120, 212, 0.25) !important;
+            color: #7DD3FC !important;
+        }
+        html.dark .bg-purple-100 {
+            background-color: rgba(168, 85, 247, 0.25) !important;
+            color: #D8B4FE !important;
+        }
+
+        /* Map Tiles in Dark Mode */
+        html.dark #fleetMap .leaflet-tile {
+            filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.35) brightness(0.75);
+        }
+        html.dark .leaflet-container {
+            background-color: #0A0F1D !important;
+        }
+
+        html.dark ::-webkit-scrollbar-track {
+            background: #0A0F1D !important;
+        }
+        html.dark ::-webkit-scrollbar-thumb {
+            background: #334155 !important;
+        }
+    </style>
+</head>
+<body class="h-full flex overflow-hidden text-slate-800 bg-[#F4F7FB] dark:bg-[#0A0F1D] dark:text-slate-100">
+
+    <!-- Mobile Off-Canvas Sidebar Backdrop -->
+    <div id="sidebar-backdrop" onclick="closeMobileSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <!-- Collapsible & Mobile Off-Canvas Modern Sidebar -->
+    <aside id="admin-sidebar" class="fixed lg:static inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 w-64 bg-white dark:bg-[#0F172A] border-r border-slate-200/90 dark:border-slate-800 flex flex-col flex-shrink-0 select-none shadow-2xl lg:shadow-none">
+        
+        <!-- Logo Section with Mobile Close Button -->
+        <div class="h-16 flex items-center justify-between px-5 border-b border-slate-100 dark:border-slate-800 gap-3">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-xl bg-[#0078D4] flex items-center justify-center font-black text-white text-lg shadow-sm group-hover:scale-105 transition-transform shrink-0">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                </div>
+                <div class="sidebar-logo-text min-w-0">
+                    <span class="text-xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-0.5">
+                        JOLT<span class="text-[#0078D4]">.</span>
+                    </span>
+                    <span class="text-[9px] block font-extrabold text-[#0078D4] tracking-widest uppercase -mt-1">
+                        Mobility Admin
+                    </span>
+                </div>
+            </a>
+
+            <!-- Mobile Close Button (Visible on phones only) -->
+            <button onclick="closeMobileSidebar()" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Funga Menyu">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Navigation Links with Unified Corporate Styling (Clean, No Rainbow Chaos) -->
+        <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+            
+            <!-- 1. Dashibodi Kuu (Dashboard) -->
+            <div class="sidebar-item-wrap" data-tooltip="Dashibodi Kuu">
+                <a href="index.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#EFF6FC] dark:bg-[#0078D4]/15 text-[#0078D4] dark:text-[#38BDF8] border-l-4 border-[#0078D4] shadow-xs font-black">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-[#0078D4]">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate">Dashibodi Kuu</span>
+                </a>
+            </div>
+
+            <!-- 2. Vijiwe vya Boda (Stands) -->
+            <div class="sidebar-item-wrap" data-tooltip="Vijiwe vya Boda">
+                <a href="stands.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="store" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Vijiwe vya Boda</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Stand</span>
+                </a>
+            </div>
+
+            <!-- 3. JOLT Energy & Betri (EV Swap) -->
+            <div class="sidebar-item-wrap" data-tooltip="JOLT Energy & Betri">
+                <a href="energy.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">JOLT Energy & Betri</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">EV Swap</span>
+                </a>
+            </div>
+
+            <!-- 4. Madereva & KYC (NIDA) -->
+            <div class="sidebar-item-wrap" data-tooltip="Madereva & KYC">
+                <a href="drivers.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="user-check" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Madereva & KYC</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">NIDA</span>
+                </a>
+            </div>
+
+            <!-- 5. Vyombo vya Moto (Fleet) -->
+            <div class="sidebar-item-wrap" data-tooltip="Vyombo vya Moto">
+                <a href="vehicles.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="bike" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Vyombo vya Moto</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Fleet</span>
+                </a>
+            </div>
+
+            <!-- 6. Ufuatiliaji Safari (Trips Tracking) -->
+            <div class="sidebar-item-wrap" data-tooltip="Ufuatiliaji Safari">
+                <a href="rides.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="navigation" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Ufuatiliaji Safari</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Live</span>
+                </a>
+            </div>
+
+            <!-- 7. Kesi & Usalama (Incidents) -->
+            <div class="sidebar-item-wrap" data-tooltip="Kesi & Usalama">
+                <a href="incidents.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Kesi & Usalama</span>
+                    <span class="sidebar-badge text-[10px] font-black px-1.5 py-0.5 rounded-md bg-red-50 text-red-600 dark:bg-red-950/60 dark:text-red-400">SOS</span>
+                </a>
+            </div>
+
+            <!-- 8. Mipangilio ya Bei (Fares) -->
+            <div class="sidebar-item-wrap" data-tooltip="Mipangilio ya Bei">
+                <a href="fares.html" class="sidebar-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white">
+                    <div class="w-5 h-5 flex items-center justify-center shrink-0 text-slate-400 dark:text-slate-500">
+                        <i data-lucide="coins" class="w-4 h-4"></i>
+                    </div>
+                    <span class="sidebar-text truncate flex-1">Mipangilio ya Bei</span>
+                    <span class="sidebar-badge text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Nauli</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Current Admin Footer -->
+        <div class="p-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0D1424] flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-full bg-[#0078D4] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
+                    AM
+                </div>
+                <div class="sidebar-profile-text min-w-0">
+                    <p class="text-xs font-black text-slate-800 dark:text-slate-200 truncate">arrifai mun...</p>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold truncate">Administrator</p>
+                </div>
+            </div>
+            <div class="sidebar-footer-actions flex items-center gap-1 text-slate-400">
+                <a href="fares.html" class="p-1.5 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-lg transition" title="Mipangilio">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                </a>
+                <a href="../index.html" target="_blank" class="p-1.5 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-lg transition" title="Tovuti">
+                    <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden min-w-0">
+        
+        <!-- Top Navbar: Clean, High-Contrast Bright Header (No Dimness, Crystal-Clear Icons) -->
+        <header class="h-16 bg-white dark:bg-[#0F172A] border-b border-slate-200/90 dark:border-slate-800 flex items-center justify-between px-3 sm:px-6 flex-shrink-0 z-30 shadow-xs text-slate-800 dark:text-slate-100 select-none">
+            
+            <!-- Left: Mobile Menu Button & Desktop Sidebar Toggle -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Mobile Hamburger Button -->
+                <button id="mobile-sidebar-toggle" onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 transition" aria-label="Fungua Menyu ya Dashibodi">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Desktop Sidebar Collapse Toggle Button -->
+                <button id="sidebar-toggle" onclick="toggleSidebar()" class="hidden lg:flex w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 items-center justify-center transition shadow-xs cursor-pointer border border-slate-200/80 dark:border-slate-700" title="Funga / Fungua Sidebar">
+                    <i data-lucide="chevrons-left" id="sidebar-toggle-icon" class="w-4 h-4"></i>
+                </button>
+
+                <div class="hidden sm:flex items-center gap-2 pl-1">
+                    <a href="../index.html" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition border border-slate-200/80 dark:border-slate-700">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#0078D4]"></i>
+                        <span>Tazama Tovuti Kuu</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Controls: Crisp High-Visibility Badges, Switchers, Dropdowns & User Menu -->
+            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                
+                <!-- Main Branch / Makao Makuu Pill with Interactive Dropdown -->
+                <div class="relative hidden md:block">
+                    <button onclick="toggleDropdown('branchDropdown', event)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
+                        <i data-lucide="building" class="w-3.5 h-3.5 text-[#0078D4]"></i>
+                        <span id="currentBranchLabel">Makao Makuu Dar</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+                    </button>
+                    <div id="branchDropdown" class="hidden absolute left-0 mt-2 w-52 bg-white dark:bg-[#111A2E] rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-1.5 text-slate-800 dark:text-slate-100 text-xs font-bold z-50">
+                        <div class="px-3 py-1.5 text-[10px] uppercase font-black text-slate-400 border-b border-slate-100 dark:border-slate-800">Chagua Kanda / Tawi</div>
+                        <a href="javascript:void(0)" onclick="selectBranch('Makao Makuu Dar')" class="block px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4] flex items-center justify-between">
+                            <span>Makao Makuu (Dar)</span>
+                            <span class="text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-black">Active</span>
+                        </a>
+                        <a href="javascript:void(0)" onclick="selectBranch('Kituo cha Arusha')" class="block px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4]">Kanda ya Kaskazini (Arusha)</a>
+                        <a href="javascript:void(0)" onclick="selectBranch('Kituo cha Mwanza')" class="block px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4]">Kanda ya Ziwa (Mwanza)</a>
+                        <a href="javascript:void(0)" onclick="selectBranch('Kituo cha Dodoma')" class="block px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4]">Makao Makuu Dodoma</a>
+                    </div>
+                </div>
+
+                <!-- Language Pill with Dropdown (Using Clean SVG Flags) -->
+                <div class="relative">
+                    <button onclick="toggleDropdown('langDropdown', event)" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition" title="Badili Lugha">
+                        <span id="currentFlag" class="flex items-center shrink-0">
+                            <svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden" viewBox="0 0 36 24">
+                                <polygon points="0 0, 36 0, 0 24" fill="#1EB53A"/>
+                                <polygon points="36 0, 36 24, 0 24" fill="#00A3DD"/>
+                                <polygon points="0 24, 8 24, 36 5.33, 36 0, 28 0, 0 18.67" fill="#FCD116"/>
+                                <polygon points="0 24, 5.33 24, 36 3.55, 36 0, 30.67 0, 0 20.44" fill="#000000"/>
+                            </svg>
+                        </span>
+                        <span id="currentLangLabel">SW</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+                    </button>
+                    <div id="langDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-[#111A2E] rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-1.5 text-slate-800 dark:text-slate-100 text-xs font-bold z-50">
+                        <a href="javascript:void(0)" onclick="selectLang('sw')" class="px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4] flex items-center gap-2.5">
+                            <svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden shrink-0" viewBox="0 0 36 24">
+                                <polygon points="0 0, 36 0, 0 24" fill="#1EB53A"/>
+                                <polygon points="36 0, 36 24, 0 24" fill="#00A3DD"/>
+                                <polygon points="0 24, 8 24, 36 5.33, 36 0, 28 0, 0 18.67" fill="#FCD116"/>
+                                <polygon points="0 24, 5.33 24, 36 3.55, 36 0, 30.67 0, 0 20.44" fill="#000000"/>
+                            </svg>
+                            <span>Kiswahili</span>
+                        </a>
+                        <a href="javascript:void(0)" onclick="selectLang('en')" class="px-3.5 py-2 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#0078D4] flex items-center gap-2.5">
+                            <svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden shrink-0" viewBox="0 0 60 36">
+                                <rect width="60" height="36" fill="#012169"/>
+                                <path d="M0,0 L60,36 M60,0 L0,36" stroke="#ffffff" stroke-width="7"/>
+                                <path d="M0,0 L60,36" stroke="#C8102E" stroke-width="4"/>
+                                <path d="M60,0 L0,36" stroke="#C8102E" stroke-width="4"/>
+                                <path d="M30,0 V36 M0,18 H60" stroke="#ffffff" stroke-width="11"/>
+                                <path d="M30,0 V36 M0,18 H60" stroke="#C8102E" stroke-width="6.5"/>
+                            </svg>
+                            <span>English</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mode Pill (Dark/Light toggle) -->
+                <button onclick="toggleDarkMode()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition" title="Badili Muonekano">
+                    <i data-lucide="moon" id="modeIcon" class="w-3.5 h-3.5 text-slate-600 dark:text-amber-400"></i>
+                    <span class="hidden sm:inline" id="modeText">Mode</span>
+                </button>
+
+                <!-- Notification Bell with High-Visibility Red Badge -->
+                <div class="relative">
+                    <button onclick="toggleDropdown('notificationsDropdown', event)" class="relative p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-200 transition cursor-pointer" title="Arifa & Tahadhari">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center animate-pulse">
+                            5
+                        </span>
+                    </button>
+                    <div id="notificationsDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-[#111A2E] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 py-2 text-slate-800 dark:text-slate-100 z-50">
+                        <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <span class="font-extrabold text-xs text-slate-900 dark:text-white">Arifa & Tahadhari za Moja kwa Moja</span>
+                            <span class="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded font-black">5 Mpya</span>
+                        </div>
+                        <div class="max-h-72 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+                            <a href="incidents.html" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-start gap-2.5 block transition">
+                                <span class="w-2 h-2 rounded-full bg-red-500 mt-1 shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white">Kesi ya Dharura (SOS)</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Msaada wa safari unahitajika kituo cha Mwenge.</p>
+                                    <span class="text-[9px] text-slate-400 mt-1 block">Dakika 5 zilizopita</span>
+                                </div>
+                            </a>
+                            <a href="/admin/drivers?status=pending_review" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-start gap-2.5 block transition">
+                                <span class="w-2 h-2 rounded-full bg-amber-500 mt-1 shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white">Madereva Wapya Wanasubiri Uhakiki</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Nyaraka za NIDA na leseni za udereva zimetumwa.</p>
+                                    <span class="text-[9px] text-slate-400 mt-1 block">Saa 1 lililopita</span>
+                                </div>
+                            </a>
+                            <a href="energy.html" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 flex items-start gap-2.5 block transition">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 mt-1 shrink-0"></span>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white">Miamala ya Kubadili Betri (EV Swap)</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Kituo cha Petrocity Sinza: Betri 6 zimebadilishwa.</p>
+                                    <span class="text-[9px] text-slate-400 mt-1 block">Saa 2 zilizopita</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="p-2 border-t border-slate-100 dark:border-slate-800 text-center">
+                            <a href="rides.html" class="text-xs font-bold text-[#0078D4] hover:underline">Tazama kumbukumbu zote &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile Pill with Interactive Menu -->
+                <div class="relative">
+                    <button onclick="toggleDropdown('profileDropdown', event)" class="inline-flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition cursor-pointer">
+                        <div class="w-6 h-6 rounded-full bg-[#0078D4] text-white flex items-center justify-center text-[10px] font-black shadow-xs">
+                            AM
+                        </div>
+                        <span class="hidden sm:inline">Admin ▾</span>
+                    </button>
+                    <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white dark:bg-[#111A2E] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 py-2 text-slate-800 dark:text-slate-100 z-50">
+                        <div class="px-4 py-2.5 border-b border-slate-100 dark:border-slate-800">
+                            <p class="font-black text-xs text-slate-900 dark:text-white">arrifai muntazir</p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">admin@jolt.co.tz</p>
+                            <span class="mt-1 inline-block text-[9px] font-black uppercase px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/50 text-[#0078D4] dark:text-sky-300">Super Administrator</span>
+                        </div>
+                        <div class="py-1 text-xs font-bold">
+                            <a href="fares.html" class="px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                <i data-lucide="coins" class="w-4 h-4 text-slate-400"></i>
+                                <span>Mipangilio ya Bei</span>
+                            </a>
+                            <a href="stands.html" class="px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                <i data-lucide="store" class="w-4 h-4 text-slate-400"></i>
+                                <span>Vijiwe & Vituo</span>
+                            </a>
+                            <a href="energy.html" class="px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                <i data-lucide="zap" class="w-4 h-4 text-slate-400"></i>
+                                <span>Mtandao wa Betri</span>
+                            </a>
+                        </div>
+                        <div class="border-t border-slate-100 dark:border-slate-800 pt-1">
+                            <a href="../index.html" target="_blank" class="px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 text-slate-700 dark:text-slate-300 text-xs font-bold">
+                                <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+                                <span>Tovuti Kuu</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Dynamic Body -->
+        <main class="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 bg-[#F4F7FB] dark:bg-[#0A0F1D]">
+            
+            
+            
+            <div class="space-y-6">
+
+    <!-- Sub-Header Row (Clean, Professional & Mobile-Responsive) -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
+                <h1 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">arrifai</h1>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">
+                02 Nov 2026 &bull; Mfumo wa Safari na Nishati Safi (0% Kamisheni)
+            </p>
+        </div>
+
+        <!-- Filter Dropdown Pills (Wrap cleanly on mobile) -->
+        <div class="flex flex-wrap items-center gap-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-[#111A2E] border border-slate-200/90 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                <i data-lucide="users" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span>Madereva Wote</span>
+                <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+            </div>
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-[#111A2E] border border-slate-200/90 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span>Mwezi Huu</span>
+                <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+            </div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-[#111A2E] border border-slate-200/90 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span>Ripoti</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Action Shortcut Strip (Clean Corporate Unified Styling) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+        <!-- 1. Safari za Moja kwa Moja -->
+        <a href="rides.html" class="bg-white dark:bg-[#111A2E] p-3 sm:p-4 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:border-[#0078D4]/60 hover:shadow-sm transition flex items-center gap-2.5 sm:gap-3 group cursor-pointer">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-blue-50 group-hover:text-[#0078D4] transition">
+                <i data-lucide="compass" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </div>
+            <div class="min-w-0">
+                <p class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white truncate">Safari za Moja</p>
+                <p class="text-[10px] sm:text-[11px] text-slate-400 truncate">Ufuatiliaji Safari</p>
+            </div>
+        </a>
+
+        <!-- 2. Uhakiki wa Madereva -->
+        <a href="/admin/drivers?status=pending_review" class="bg-white dark:bg-[#111A2E] p-3 sm:p-4 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:border-[#0078D4]/60 hover:shadow-sm transition flex items-center gap-2.5 sm:gap-3 group cursor-pointer relative">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-blue-50 group-hover:text-[#0078D4] transition relative">
+                <i data-lucide="user-check" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                            </div>
+            <div class="min-w-0">
+                <p class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white truncate">Uhakiki Madereva</p>
+                <p class="text-[10px] sm:text-[11px] text-slate-400 truncate">Leseni & NIDA</p>
+            </div>
+        </a>
+
+        <!-- 3. Vijiwe vya Boda -->
+        <a href="stands.html" class="bg-white dark:bg-[#111A2E] p-3 sm:p-4 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:border-[#0078D4]/60 hover:shadow-sm transition flex items-center gap-2.5 sm:gap-3 group cursor-pointer">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-blue-50 group-hover:text-[#0078D4] transition">
+                <i data-lucide="store" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </div>
+            <div class="min-w-0">
+                <p class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white truncate">Vijiwe vya Boda</p>
+                <p class="text-[10px] sm:text-[11px] text-slate-400 truncate">5 Vituo Hai</p>
+            </div>
+        </a>
+
+        <!-- 4. JOLT Energy & Betri -->
+        <a href="energy.html" class="bg-white dark:bg-[#111A2E] p-3 sm:p-4 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:border-[#0078D4]/60 hover:shadow-sm transition flex items-center gap-2.5 sm:gap-3 group cursor-pointer">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-[#0078D4] dark:text-[#38BDF8] flex items-center justify-center shrink-0 group-hover:scale-105 transition">
+                <i data-lucide="zap" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </div>
+            <div class="min-w-0">
+                <p class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white truncate">JOLT Energy</p>
+                <p class="text-[10px] sm:text-[11px] text-slate-400 truncate">4 Vituo vya Betri</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- 4 Clean Corporate KPI Cards (Unified Slate Borders, No Rainbow Chaos, 2-cols on Mobile) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        
+        <!-- Card 1: TOTAL SALES -->
+        <div class="bg-white dark:bg-[#111A2E] p-3.5 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:border-[#0078D4]/50 transition flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] sm:text-[11px] font-extrabold tracking-wider text-slate-500 uppercase truncate">Total Nauli</span>
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 flex items-center justify-center text-[#0078D4] shrink-0">
+                        <i data-lucide="wallet" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                    </div>
+                </div>
+                <div class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white font-mono tracking-tight truncate">
+                    79,500 <span class="text-[10px] sm:text-xs font-bold text-slate-400">TSh</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-between mt-2.5 sm:mt-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] sm:text-xs font-semibold text-slate-400">Revenue</span>
+                <span class="px-1.5 sm:px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/30 text-[#0078D4] dark:text-[#38BDF8] text-[10px] sm:text-[11px] font-extrabold">
+                    100% Madereva
+                </span>
+            </div>
+        </div>
+
+        <!-- Card 2: GROSS PROFIT (Swap) -->
+        <div class="bg-white dark:bg-[#111A2E] p-3.5 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:border-[#0078D4]/50 transition flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] sm:text-[11px] font-extrabold tracking-wider text-slate-500 uppercase truncate">Swap Profit</span>
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 flex items-center justify-center text-emerald-600 shrink-0">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                    </div>
+                </div>
+                <div class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white font-mono tracking-tight truncate">
+                    4,800 <span class="text-[10px] sm:text-xs font-bold text-slate-400">TSh</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-between mt-2.5 sm:mt-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] sm:text-xs font-semibold text-slate-400">Margin</span>
+                <span class="px-1.5 sm:px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-[10px] sm:text-[11px] font-extrabold">
+                    20% Cut
+                </span>
+            </div>
+        </div>
+
+        <!-- Card 3: VIJIWE VYA BODA -->
+        <div class="bg-white dark:bg-[#111A2E] p-3.5 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:border-[#0078D4]/50 transition flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] sm:text-[11px] font-extrabold tracking-wider text-slate-500 uppercase truncate">Vijiwe vya Boda</span>
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 shrink-0">
+                        <i data-lucide="store" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                    </div>
+                </div>
+                <div class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white font-mono tracking-tight truncate">
+                    5 <span class="text-[10px] sm:text-xs font-bold text-slate-400">Vituo</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-between mt-2.5 sm:mt-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] sm:text-xs font-semibold text-slate-400">Stands Hai</span>
+                <span class="px-1.5 sm:px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] sm:text-[11px] font-extrabold">
+                    LATRA Rasmi
+                </span>
+            </div>
+        </div>
+
+        <!-- Card 4: MADEREVA MTANDAONI -->
+        <div class="bg-white dark:bg-[#111A2E] p-3.5 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:border-[#0078D4]/50 transition flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] sm:text-[11px] font-extrabold tracking-wider text-slate-500 uppercase truncate">Madereva Hewani</span>
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 shrink-0">
+                        <i data-lucide="users" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                    </div>
+                </div>
+                <div class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white font-mono tracking-tight truncate">
+                    8 <span class="text-[11px] sm:text-sm font-semibold text-slate-400">/ 8</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-between mt-2.5 sm:mt-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] sm:text-xs font-semibold text-slate-400">Mtandaoni</span>
+                <span class="px-1.5 sm:px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-[10px] sm:text-[11px] font-extrabold">
+                    Hewani Sasa
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Alert / Financial Ledger Banner (Clean Corporate Border) -->
+    <div class="bg-white dark:bg-[#111A2E] p-4 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 border-l-4 border-l-[#0078D4] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 sm:gap-3.5">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-[#0078D4] dark:text-[#38BDF8] flex items-center justify-center shrink-0">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-black uppercase tracking-wider text-slate-400">Sera ya JOLT: 0% Kamisheni kwa Madereva</p>
+                <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+                    <span>TZS 0 TOZO YA JOLT</span>
+                    <span class="text-[11px] sm:text-xs px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 font-extrabold font-sans">
+                        100% Yako
+                    </span>
+                </h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                    Madereva wanabakiza 100% ya mapato yao ya safari. Mapato ya JOLT yanatokana na ada ya 20% ya kubadilisha betri za umeme.
+                </p>
+            </div>
+        </div>
+
+        <div class="text-left md:text-right border-t md:border-t-0 pt-3 md:pt-0 w-full md:w-auto text-xs">
+            <div class="text-slate-500 dark:text-slate-400 font-medium">
+                Jumla ya Nauli: <strong class="text-slate-900 dark:text-white font-mono">TZS 79,500</strong>
+            </div>
+            <div class="text-slate-500 dark:text-slate-400 font-medium">
+                - Ada ya JOLT: <strong class="text-emerald-600 dark:text-emerald-400 font-mono">0 TSh (0%)</strong>
+            </div>
+            <div class="font-bold text-[#0078D4] dark:text-[#38BDF8] mt-1">
+                Kiwango cha Dereva: <span class="font-mono font-black text-xs sm:text-sm">100% Retained</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Middle Section: Live Fleet & Stands Map + EV Energy Overview (2 Columns) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+        
+        <!-- Column 1 & 2: Live Fleet Map -->
+        <div class="lg:col-span-2 bg-white dark:bg-[#111A2E] p-4 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 sm:mb-4">
+                <div>
+                    <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i data-lucide="map" class="w-4 h-4 text-[#0078D4]"></i>
+                        <span>Ramani ya Madereva & Vijiwe</span>
+                    </h3>
+                    <p class="text-[11px] sm:text-xs text-slate-400 font-medium mt-0.5">
+                        Ufuatiliaji wa wakati halisi &bull; Dar es Salaam
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800 text-[11px]">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Madereva Hewani (8)
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-sky-300 border border-blue-200/60 dark:border-blue-800 text-[11px]">
+                        <span class="w-2 h-2 rounded-full bg-[#0078D4]"></span> Vijiwe (5)
+                    </span>
+                </div>
+            </div>
+
+            <!-- Leaflet Map Box (Responsive Height) -->
+            <div id="fleetMap" class="w-full h-64 sm:h-80 rounded-xl border border-slate-200/80 dark:border-slate-700 z-10 shadow-inner"></div>
+        </div>
+
+        <!-- Column 3: EV Energy & Battery Stations Overview -->
+        <div class="bg-white dark:bg-[#111A2E] p-4 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="zap" class="w-4 h-4 text-[#0078D4]"></i>
+                            <span>Vituo vya Nishati</span>
+                        </h3>
+                        <p class="text-[11px] sm:text-xs text-slate-400 font-medium mt-0.5">Mtandao wa EV Betri Dar</p>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-[11px] font-extrabold">
+                        20% Cut
+                    </span>
+                </div>
+
+                <div class="space-y-3 sm:space-y-3.5">
+                    <!-- Partner Stations -->
+                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 flex items-center justify-center font-bold text-xs">
+                                EV
+                            </div>
+                            <div>
+                                <p class="text-xs font-extrabold text-slate-800 dark:text-slate-200">Petrocity & TotalEnergies</p>
+                                <p class="text-[10px] text-slate-400">Vituo 14 vya Kubadilishia Betri</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-black text-emerald-600 dark:text-emerald-400 font-mono">Hai</span>
+                    </div>
+
+                    <!-- Swaps Stats -->
+                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold text-slate-600 dark:text-slate-400">Swaps Zilizofanyika</p>
+                            <p class="text-base sm:text-lg font-black text-slate-900 dark:text-white font-mono">6 <span class="text-xs font-normal text-slate-400">miamala</span></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-slate-600 dark:text-slate-400">JOLT 20% Share</p>
+                            <p class="text-base sm:text-lg font-black text-[#0078D4] dark:text-[#38BDF8] font-mono">TZS 4,800</p>
+                        </div>
+                    </div>
+
+                    <!-- Battery Charge Availability Progress -->
+                    <div>
+                        <div class="flex justify-between text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">
+                            <span>Betri Zenye Chaji Kamili</span>
+                            <span class="text-emerald-600 dark:text-emerald-400 font-mono">92% Tayari</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+                            <div class="bg-emerald-500 h-2 rounded-full" style="width: 92%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
+                <a href="energy.html" class="w-full py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center gap-2 transition">
+                    <span>Tazama Mtandao wa Betri &rarr;</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Recent Rides Table (Crisp Z-POS Modern Table Style) -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="navigation" class="w-4 h-4 text-[#0078D4]"></i>
+                    <span>Safari za Hivi Karibuni</span>
+                </h3>
+                <p class="text-xs text-slate-400 font-medium mt-0.5">Miamala ya safari bila tozo ya JOLT (0% Kamisheni)</p>
+            </div>
+            <a href="rides.html" class="inline-flex items-center gap-1 text-xs font-extrabold text-[#0078D4] hover:text-[#0063B1] transition">
+                <span>Tazama Safari Zote</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-black text-slate-500 uppercase tracking-wider">
+                        <th class="py-3.5 px-5">ID & Muda</th>
+                        <th class="py-3.5 px-5">Abiria</th>
+                        <th class="py-3.5 px-5">Dereva</th>
+                        <th class="py-3.5 px-5">Chombo</th>
+                        <th class="py-3.5 px-5">Njia (Route)</th>
+                        <th class="py-3.5 px-5 text-right">Nauli</th>
+                        <th class="py-3.5 px-5 text-right">Ada ya JOLT</th>
+                        <th class="py-3.5 px-5 text-center">Hadhi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-xs">
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #2bf931d0
+                            <span class="block text-[10px] font-normal text-slate-400">04:43</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #a2339892
+                            <span class="block text-[10px] font-normal text-slate-400">04:40</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #8911ec0c
+                            <span class="block text-[10px] font-normal text-slate-400">04:32</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #ad47139a
+                            <span class="block text-[10px] font-normal text-slate-400">04:29</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #0a9d215a
+                            <span class="block text-[10px] font-normal text-slate-400">04:23</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #edff2c75
+                            <span class="block text-[10px] font-normal text-slate-400">04:22</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #139e4d59
+                            <span class="block text-[10px] font-normal text-slate-400">04:20</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #a9e19421
+                            <span class="block text-[10px] font-normal text-slate-400">04:16</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #bde1ffb5
+                            <span class="block text-[10px] font-normal text-slate-400">04:14</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                        <tr class="hover:bg-slate-50/60 transition">
+                        <td class="py-3.5 px-5 font-mono text-xs font-bold text-slate-700">
+                            #bf3d9ba3
+                            <span class="block text-[10px] font-normal text-slate-400">03:54</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">John Magufuli Road Test</div>
+                            <div class="text-[10px] text-slate-400 font-mono">+255712999888</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <div class="font-extrabold text-slate-900">Bado Hajapangiwa</div>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
+                                JOLT Basic
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-5 max-w-xs text-[11px] text-slate-600">
+                            <div class="truncate"><strong class="text-[#0078D4]">Kutoka:</strong> Kariakoo Msimbazi</div>
+                            <div class="truncate"><strong class="text-emerald-600">Hadi:</strong> Mwenge IT Market</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-slate-900">
+                            TZS 5,000
+                        </td>
+                        <td class="py-3.5 px-5 text-right font-mono font-black text-emerald-600">
+                            TZS 0 (0%)
+                        </td>
+                        <td class="py-3.5 px-5 text-center">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                                    Imekamilika
+                                </span>
+                                                    </td>
+                    </tr>
+                                    </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<!-- 3. Modal: Rekodi Betri Swap (EV Energy) -->
+<div id="modalNewSwap" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden transform transition-all animate-in fade-in zoom-in duration-150">
+        <div class="px-6 py-4 bg-emerald-600 text-white flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                    <i data-lucide="battery-charging" class="w-4 h-4 text-white"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-black">Rekodi Muamala wa Betri (EV Swap)</h3>
+                    <p class="text-[11px] text-emerald-100 font-medium">Gawio: 80% Kituo • 20% JOLT</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeModal('modalNewSwap')" class="w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition cursor-pointer">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <form action="http://127.0.0.1:8000/admin/energy/swaps" method="POST" class="p-6 space-y-4">
+            <input type="hidden" name="_token" value="XIULuPaXbfDzPpSVlX2S92cCQBD9qhxJ6CpdlHOy" autocomplete="off">            
+            <div>
+                <label class="block text-xs font-black text-slate-700 uppercase mb-1">Kituo cha Mafuta / Swap *</label>
+                <select name="station_id" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-hidden focus:border-emerald-600">
+                                            <option value="4">GBP Oil - Kariakoo Swahili (GBP) - Swahili Street &amp; Msimbazi, Kariakoo</option>
+                                            <option value="3">Oryx Oil - Morocco Kituo Kikuu (Oryx Oil) - Ali Hassan Mwinyi Road, Morocco Bus Terminal</option>
+                                            <option value="1">Puma Energy - Samora Avenue (Puma Energy) - Samora Ave, Posta Mpya, Dar es Salaam</option>
+                                            <option value="2">TotalEnergies - Mwenge Hub (TotalEnergies) - Bagamoyo Road mkabala na Mlimani City, Dar es Salaam</option>
+                                    </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-black text-slate-700 uppercase mb-1">Dereva wa EV *</label>
+                <select name="driver_id" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-hidden focus:border-emerald-600">
+                                            <option value="9ac26745-b99b-442c-9053-7c7615319807">Ally Mohamed (+255755123405)</option>
+                                            <option value="6c9eaafd-7bf2-4ddf-b1c3-e42ba9365671">Baraka Emmanuel (+255755123402)</option>
+                                            <option value="f4d81455-e3f3-4336-bd75-b86e2516568c">Hamisi Bakari (+255755123404)</option>
+                                            <option value="441a971d-0463-4247-b2dc-5e2aae7b1107">Josephat Mushi (+255755123403)</option>
+                                            <option value="6bdb59cd-cf9e-11f1-9a15-1062e5a3978f">Juma Selemani (+255755111222)</option>
+                                            <option value="5b7292ba-6494-41e3-8e32-9ffecc61f1fe">Juma Selemani (+255755123401)</option>
+                                            <option value="8c74d508-8515-4212-b64c-2024964dbd15">Rashid Mwinyi Test (+255766725391)</option>
+                                            <option value="0de0f475-fd8f-42cb-84ab-b522e6cc577f">Rashid Mwinyi Test (+255764748833)</option>
+                                    </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-black text-slate-700 uppercase mb-1">Ada ya Kubadilisha Betri (TZS) *</label>
+                <input type="number" name="swap_fee_tzs" required value="3500" step="500" min="1000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold font-mono text-slate-800 focus:outline-hidden focus:border-emerald-600">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+                <div>
+                    <span class="text-slate-400 font-bold block text-[10px] uppercase">Mgawo wa Kituo (80%)</span>
+                    <span class="text-slate-900 font-black font-mono text-sm">TZS 2,800</span>
+                </div>
+                <div class="text-right">
+                    <span class="text-emerald-600 font-bold block text-[10px] uppercase">JOLT 20% Revenue</span>
+                    <span class="text-emerald-700 font-black font-mono text-sm">TZS 700</span>
+                </div>
+            </div>
+
+            <div class="pt-2 flex items-center justify-end gap-3 border-t border-slate-100">
+                <button type="button" onclick="closeModal('modalNewSwap')" class="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+                    Ghairi
+                </button>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-md shadow-emerald-600/20 transition cursor-pointer flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    <span>Rekodi Muamala wa Betri</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+        </main>
+    </div>
+
+    <!-- JavaScript for Sidebar, Dropdowns & Interactive Controls -->
+    <script>
+        // Mobile Sidebar Controls
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (!sidebar) return;
+            const isOpen = sidebar.classList.contains('translate-x-0');
+            if (isOpen) {
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+                if (backdrop) backdrop.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('translate-x-0');
+                if (backdrop) backdrop.classList.remove('hidden');
+            }
+        }
+
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (sidebar) {
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+            }
+            if (backdrop) {
+                backdrop.classList.add('hidden');
+            }
+        }
+
+        // Desktop Sidebar Collapse Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const toggleIcon = document.getElementById('sidebar-toggle-icon');
+            const isCurrentlyCollapsed = sidebar.classList.contains('w-20');
+
+            if (isCurrentlyCollapsed) {
+                sidebar.classList.remove('w-20');
+                sidebar.classList.add('w-64');
+                document.body.classList.remove('sidebar-collapsed');
+                if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'chevrons-left');
+                localStorage.setItem('jolt_sidebar_collapsed', 'false');
+            } else {
+                sidebar.classList.remove('w-64');
+                sidebar.classList.add('w-20');
+                document.body.classList.add('sidebar-collapsed');
+                if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'chevrons-right');
+                localStorage.setItem('jolt_sidebar_collapsed', 'true');
+            }
+            lucide.createIcons();
+        }
+
+        // Dropdown toggle
+        function toggleDropdown(id, event) {
+            if (event) event.stopPropagation();
+            const el = document.getElementById(id);
+            const allDropdowns = ['branchDropdown', 'langDropdown', 'notificationsDropdown', 'profileDropdown'];
+            allDropdowns.forEach(d => {
+                if (d !== id) {
+                    const other = document.getElementById(d);
+                    if (other) other.classList.add('hidden');
+                }
+            });
+            if (el) el.classList.toggle('hidden');
+        }
+
+        // Close dropdowns on outside click
+        window.addEventListener('click', function(e) {
+            const allDropdowns = ['branchDropdown', 'langDropdown', 'notificationsDropdown', 'profileDropdown'];
+            allDropdowns.forEach(d => {
+                const el = document.getElementById(d);
+                if (el && !el.classList.contains('hidden')) {
+                    el.classList.add('hidden');
+                }
+            });
+        });
+
+        // Close mobile sidebar on desktop resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                closeMobileSidebar();
+            }
+        });
+
+        // Branch Switcher
+        function selectBranch(name) {
+            document.getElementById('currentBranchLabel').textContent = name;
+            const el = document.getElementById('branchDropdown');
+            if (el) el.classList.add('hidden');
+        }
+
+        // Language Switcher with SVG Flags
+        function selectLang(code) {
+            const currentFlag = document.getElementById('currentFlag');
+            const currentLangLabel = document.getElementById('currentLangLabel');
+            if (code === 'en') {
+                if (currentFlag) {
+                    currentFlag.innerHTML = `<svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden" viewBox="0 0 60 36">
+                        <rect width="60" height="36" fill="#012169"/>
+                        <path d="M0,0 L60,36 M60,0 L0,36" stroke="#ffffff" stroke-width="7"/>
+                        <path d="M0,0 L60,36" stroke="#C8102E" stroke-width="4"/>
+                        <path d="M60,0 L0,36" stroke="#C8102E" stroke-width="4"/>
+                        <path d="M30,0 V36 M0,18 H60" stroke="#ffffff" stroke-width="11"/>
+                        <path d="M30,0 V36 M0,18 H60" stroke="#C8102E" stroke-width="6.5"/>
+                    </svg>`;
+                }
+                if (currentLangLabel) currentLangLabel.textContent = 'EN';
+            } else {
+                if (currentFlag) {
+                    currentFlag.innerHTML = `<svg class="w-4 h-3 rounded-[2px] shadow-2xs border border-slate-200/60 overflow-hidden" viewBox="0 0 36 24">
+                        <polygon points="0 0, 36 0, 0 24" fill="#1EB53A"/>
+                        <polygon points="36 0, 36 24, 0 24" fill="#00A3DD"/>
+                        <polygon points="0 24, 8 24, 36 5.33, 36 0, 28 0, 0 18.67" fill="#FCD116"/>
+                        <polygon points="0 24, 5.33 24, 36 3.55, 36 0, 30.67 0, 0 20.44" fill="#000000"/>
+                    </svg>`;
+                }
+                if (currentLangLabel) currentLangLabel.textContent = 'SW';
+            }
+            const el = document.getElementById('langDropdown');
+            if (el) el.classList.add('hidden');
+        }
+
+        // Dark / Light Mode Toggle
+        function updateModeUi(isDark) {
+            const icon = document.getElementById('modeIcon');
+            const text = document.getElementById('modeText');
+            if (isDark) {
+                if (icon) icon.setAttribute('data-lucide', 'sun');
+                if (text) text.textContent = 'Mwanga';
+            } else {
+                if (icon) icon.setAttribute('data-lucide', 'moon');
+                if (text) text.textContent = 'Giza';
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('jolt_dark_mode', isDark ? 'true' : 'false');
+            updateModeUi(isDark);
+        }
+
+        // Initialize state on load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('jolt_sidebar_collapsed') === 'true' && window.innerWidth >= 1024) {
+                const sidebar = document.getElementById('admin-sidebar');
+                const toggleIcon = document.getElementById('sidebar-toggle-icon');
+                if (sidebar) {
+                    sidebar.classList.remove('w-64');
+                    sidebar.classList.add('w-20');
+                    document.body.classList.add('sidebar-collapsed');
+                    if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'chevrons-right');
+                }
+            }
+            updateModeUi(document.documentElement.classList.contains('dark'));
+            if (window.lucide) lucide.createIcons();
+        });
+    </script>
+    <script>
+    // Modal Helpers
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+    }
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var map = L.map('fleetMap').setView([-6.8163, 39.26], 12);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Render Online Drivers
+        var drivers = [{"lat":-6.812,"lng":39.2895,"heading":180,"name":"Josephat Mushi","phone":"+255755123403","rating":"4.95","plate":"T 542 DFP","category":"basic"},{"lat":-6.815,"lng":39.287,"heading":45,"name":"Juma Selemani","phone":"+255755123401","rating":"4.90","plate":"MC 452 DF","category":"boda"},{"lat":-6.7915,"lng":39.2075,"heading":null,"name":"Juma Selemani","phone":"+255755111222","rating":"5.00","plate":"T 342 DKT","category":"go"},{"lat":-6.818,"lng":39.282,"heading":90,"name":"Baraka Emmanuel","phone":"+255755123402","rating":"4.85","plate":"MC 891 AB","category":"bajaji"},{"lat":-6.7893,"lng":39.287,"heading":89,"name":"Rashid Mwinyi Test","phone":"+255766725391","rating":"5.00","plate":"T314XYZ","category":"basic"},{"lat":-6.814,"lng":39.291,"heading":120,"name":"Ally Mohamed","phone":"+255755123405","rating":"4.75","plate":"MC 321 KY","category":"boda"},{"lat":-6.82,"lng":39.285,"heading":270,"name":"Hamisi Bakari","phone":"+255755123404","rating":"4.90","plate":"T 112 CSZ","category":"xl"}];
+        drivers.forEach(function (d) {
+            if (d.lat && d.lng) {
+                var marker = L.circleMarker([d.lat, d.lng], {
+                    radius: 7,
+                    fillColor: "#10B981",
+                    color: "#FFFFFF",
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map);
+                marker.bindPopup("<b>" + d.name + "</b><br>" + d.phone + "<br>Gari: " + (d.plate || 'Boda') + "<br>Ukadiriaji: " + d.rating + " ★");
+            }
+        });
+
+        // Render Registered Stands (Vijiwe)
+        var stands = [{"id":1,"name":"Kijiwe cha Posta Mpya","code":"KJW-POSTA-01","zone":"Ilala - City Centre","landmark":"Mkabala na Samora Tower \u0026 Posta House","latitude":"-6.8163000","longitude":"39.2888000","service_radius_meters":600,"leader_name":"Rashid Mwinyi (Mwenyekiti)","leader_phone":"+255713445566","status":"verified","active_riders_count":38,"description":"Kijiwe kikuu cha Posta Mpya kinachohudumia wafanyakazi wa mabenki, ofisi za serikali na bandari.","created_at":"2026-10-25 17:37:28","updated_at":"2026-10-25 17:37:28"},{"id":2,"name":"Kijiwe cha Ubungo Maji","code":"KJW-UBNG-02","zone":"Ubungo","landmark":"Standi ya Ubungo Maji karibu na Chuo Kikuu (UDSM)","latitude":"-6.7865000","longitude":"39.2155000","service_radius_meters":800,"leader_name":"Hamisi Juma (Kiongozi)","leader_phone":"+255754998877","status":"verified","active_riders_count":45,"description":"Kijiwe cha wanafunzi na wakazi wa Ubungo, Mlimani City na Chuo Kikuu cha Dar es Salaam.","created_at":"2026-10-25 17:37:28","updated_at":"2026-10-25 17:37:28"},{"id":3,"name":"Kijiwe cha Mwenge TRA","code":"KJW-MWNG-03","zone":"Kinondoni","landmark":"Mwenge Bus Stand \/ Ofisi za TRA Mwenge","latitude":"-6.7712000","longitude":"39.2235000","service_radius_meters":700,"leader_name":"Bakari Kilindo (Katibu)","leader_phone":"+255762112233","status":"verified","active_riders_count":32,"description":"Kituo cha usafiri kinachounganisha abiria wanaoelekea Tegeta, Mbezi na Posta.","created_at":"2026-10-25 17:37:28","updated_at":"2026-10-25 17:37:28"},{"id":4,"name":"Kijiwe cha Kariakoo Msimbazi","code":"KJW-KARK-04","zone":"Ilala - Kariakoo","landmark":"Mtaa wa Msimbazi mkabala na Kituo cha Polisi","latitude":"-6.8205000","longitude":"39.2745000","service_radius_meters":500,"leader_name":"Selemani Athumani","leader_phone":"+255784334455","status":"verified","active_riders_count":52,"description":"Kijiwe chenye msongamano mkubwa kinachohudumia wafanyabiashara wa soko la Kariakoo.","created_at":"2026-10-25 17:37:28","updated_at":"2026-10-25 17:37:28"},{"id":5,"name":"Kijiwe cha Clocktower Arusha (Pilot Zone)","code":"KJW-ARSH-05","zone":"Arusha Central","landmark":"Arusha Clock Tower \u0026 Boma Road","latitude":"-3.3725000","longitude":"36.6944000","service_radius_meters":750,"leader_name":"Emanuel Mollel (Mwenyekiti Arusha)","leader_phone":"+255755667788","status":"verified","active_riders_count":28,"description":"Kituo cha kwanza cha majaribio ya JOLT Kaskazini (Arusha Pilot cohort).","created_at":"2026-10-25 17:37:28","updated_at":"2026-10-25 17:37:28"}];
+        stands.forEach(function (s) {
+            if (s.latitude && s.longitude) {
+                var standMarker = L.circleMarker([s.latitude, s.longitude], {
+                    radius: 9,
+                    fillColor: "#0078D4",
+                    color: "#FFFFFF",
+                    weight: 3,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map);
+                standMarker.bindPopup("<div class='p-1'><b>" + s.name + "</b><br><span class='text-xs text-gray-500'>" + s.landmark + "</span><br>Kiongozi: " + (s.leader_name || '-') + "<br>Wanachama: " + s.active_riders_count + " Boda</div>");
+            }
+        });
+    });
+</script>
+</body>
+</html>
